@@ -12,7 +12,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class CodegenIgnoreProcessorTest {
 
@@ -26,7 +25,6 @@ public class CodegenIgnoreProcessorTest {
     private String outputDir;
     private File target;
     private Path temp;
-    private static final ConcurrentLinkedQueue<Path> tempQueue = new ConcurrentLinkedQueue<>();
 
     private CodegenIgnoreProcessorTest(String filename, String ignoreDefinition, String description) throws IOException {
         this.filename = filename;
@@ -53,7 +51,6 @@ public class CodegenIgnoreProcessorTest {
         // NOTE: Each test needs its own directory because .swagger-codegen-ignore needs to exist at the root.
         temp = Files.createTempDirectory(getClass().getSimpleName());
         this.outputDir = temp.toFile().getAbsolutePath();
-        tempQueue.add(temp);
 
         target = new File(this.outputDir, this.filename);
 
@@ -76,11 +73,9 @@ public class CodegenIgnoreProcessorTest {
 
     @AfterTest
     public void afterTest() throws IOException {
-        Path t;
-        while ((t = tempQueue.poll()) != null)
-            if(t != null && t.toFile().exists() && t.toFile().isDirectory()) {
-                FileUtils.deleteDirectory(t.toFile());
-            }
+        if(temp != null && temp.toFile().exists() && temp.toFile().isDirectory()) {
+            FileUtils.deleteDirectory(temp.toFile());
+        }
     }
 
     @Test

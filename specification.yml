@@ -1,0 +1,7061 @@
+swagger: '2.0'
+host: apiv2.vestiairecollective.com
+info:
+  version: dev
+  title: Atlas API Reference
+  x-logo:
+    url: >-
+      https://www.vestiairecollective.com/assets/images/logos/logoVestiaireCollective.svg
+  description: |
+    Generated at 2019-07-31T10:20:58.801Z
+
+    # Introduction
+      default headers :
+      * X-VC-SiteId : string (ex : 1)
+      * X-VC-Language : string (ex : fr)
+      * X-VC-Currency : string (ex : EUR)
+    ## Error Handling
+    ## Pagination
+    ## Versioning
+schemes:
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+basePath: /
+tags:
+  - name: /alerts/
+    x-displayName: Alerts
+    description: |
+      Create and manage alerts.
+  - name: /breadcrumbs/
+    x-displayName: Breadcrumbs
+  - name: /campaigns/
+    x-displayName: Campaigns
+  - name: /carts/
+    x-displayName: Carts
+  - name: /comments/
+    x-displayName: Comments
+  - name: /contents/
+    x-displayName: Contents
+  - name: /negotiations/
+    x-displayName: Negotiations
+  - name: /newsletter-subscribers/
+    x-displayName: Newsletter Subscribers
+  - name: /notifications/
+    x-displayName: Notifications
+  - name: /orders/
+    x-displayName: Orders
+  - name: /payment-methods/
+    x-displayName: Payment Methods
+  - name: /products/
+    x-displayName: Products
+  - name: /reset-password-requests/
+    x-displayName: Reset Password Requests
+  - name: /sessions/
+    x-displayName: Sessions
+  - name: /shipping-methods/
+    x-displayName: Shipping
+  - name: /users/
+    x-displayName: Users
+  - name: /accounts/
+    x-displayName: Accounts
+  - name: /brands/
+    x-displayName: brands
+  - name: /prices/
+    x-displayName: prices
+  - name: /catalog/
+    x-displayName: catalog
+  - name: /shipping-plan/
+    x-displayName: Shipping Plan
+x-tagGroups:
+  - name: Account
+    tags:
+      - /notifications/
+      - /reset-password-requests/
+      - /sessions/
+      - /users/
+      - /accounts/
+  - name: Products
+    tags:
+      - /alerts/
+      - /comments/
+      - /products/
+      - /negotiations/
+  - name: Margin
+    tags:
+      - /prices/
+  - name: Brands
+    tags:
+      - /brands/
+  - name: Checkout and Payments
+    tags:
+      - /carts/
+      - /orders/
+      - /payment-methods/
+      - /shipping-methods/
+  - name: Content Management
+    tags:
+      - /breadcrumbs/
+      - /contents/
+      - /newsletter-subscribers/
+  - name: Catalog
+    tags:
+      - /catalog/
+  - name: Campaign
+    tags:
+      - /campaigns/
+  - name: Shipping Plan
+    tags:
+      - /shipping-plan/
+securityDefinitions:
+  ApiKeyAuth:
+    type: apiKey
+    in: header
+    name: __session
+paths:
+  '/accounts/{id}':
+    get:
+      x-controller: AccountController
+      x-method: get
+      operationId: getAccount
+      security:
+        - ApiKeyAuth: []
+      summary: Retrieve a single user
+      description: Returns public info about a single user
+      parameters:
+        - name: id
+          in: path
+          description: ID of the user
+          required: true
+          type: string
+          x-accept-me: true
+      responses:
+        '200':
+          description: |-
+            json:api success
+            Returns user if exists
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/account'
+              meta:
+                type: object
+            title: UserResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /accounts/
+  /alerts/average-matching-products:
+    get:
+      x-controller: AlertController
+      x-method: getAverageMatching
+      security:
+        - ApiKeyAuth: []
+      operationId: getProductsAverageMatching
+      summary: Average number of new products
+      description: >
+        Returns the average number of newly available products per
+        day/week/month that match given criteria.
+      parameters:
+        - name: path
+          in: query
+          description: Path (eg. `/woman/woman-bags`)
+          required: false
+          type: string
+        - name: searchQuery
+          in: query
+          description: Search query (eg. `leather+boots`)
+          required: false
+          type: string
+        - name: idUniverse
+          in: query
+          description: Universe Id
+          required: false
+          type: string
+        - name: idBrand
+          in: query
+          description: Brand Ids
+          required: false
+          type: array
+          uniqueItems: true
+          collectionFormat: multi
+          items:
+            type: string
+        - name: idMaterials
+          in: query
+          description: Material Ids
+          required: false
+          type: array
+          uniqueItems: true
+          collectionFormat: multi
+          items:
+            type: string
+        - name: idPattern
+          in: query
+          description: Pattern Ids
+          required: false
+          type: array
+          uniqueItems: true
+          collectionFormat: multi
+          items:
+            type: string
+        - name: idColors
+          in: query
+          description: Color Ids
+          required: false
+          type: array
+          uniqueItems: true
+          collectionFormat: multi
+          items:
+            type: string
+        - name: idCondition
+          in: query
+          description: Condition Ids
+          required: false
+          type: array
+          uniqueItems: true
+          collectionFormat: multi
+          items:
+            type: string
+        - name: idCategory
+          in: query
+          description: Category Ids
+          required: false
+          type: array
+          uniqueItems: true
+          collectionFormat: multi
+          items:
+            type: string
+        - name: idSubcategory
+          in: query
+          description: Subcategory Ids
+          required: false
+          type: array
+          uniqueItems: true
+          collectionFormat: multi
+          items:
+            type: string
+        - name: idSize
+          in: query
+          description: Size Ids
+          required: false
+          type: array
+          uniqueItems: true
+          collectionFormat: multi
+          items:
+            type: string
+        - name: stock
+          in: query
+          description: In stock
+          required: false
+          type: string
+      responses:
+        '200':
+          description: |-
+            json:api success
+            Metrics
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                type: object
+                title: AverageProducts
+                properties:
+                  averageProductsPerDay:
+                    type: integer
+                    example: '2'
+                  averageProducts:
+                    type: integer
+                    example: '42'
+                  period:
+                    type: string
+                    enum:
+                      - day
+                      - week
+                      - month
+                    example: month
+              meta:
+                type: object
+            title: AverageProductsResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+      tags:
+        - /alerts/
+  /alerts/:
+    get:
+      x-controller: AlertController
+      x-method: list
+      security:
+        - ApiKeyAuth: []
+      operationId: listAlerts
+      summary: List alerts
+      description: Lists alerts of current user
+      responses:
+        '200':
+          description: |-
+            json:api success
+            List of alerts
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/alert'
+              meta:
+                $ref: '#/definitions/paginationMetadata'
+            title: AlertListResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+      tags:
+        - /alerts/
+      parameters:
+        - $ref: '#/parameters/limit'
+        - $ref: '#/parameters/offset'
+    post:
+      x-controller: AlertController
+      x-method: create
+      operationId: createAlert
+      security:
+        - ApiKeyAuth: []
+      summary: Create an alert
+      parameters:
+        - name: payload
+          in: body
+          description: Alert settings
+          schema:
+            type: object
+            title: AlertSettings
+            required:
+              - category
+              - criteria
+            properties:
+              category:
+                description: Alert category
+                $ref: '#/definitions/alert_category'
+              channels:
+                description: A list of notification channels
+                type: array
+                items:
+                  $ref: '#/definitions/notification_channel'
+              frequency:
+                description: Notification frequency
+                $ref: '#/definitions/notification_frequency'
+              criteria:
+                description: A list of alert criteria
+                type: array
+                items:
+                  $ref: '#/definitions/alert_criterion'
+      responses:
+        '201':
+          description: |-
+            json:api success
+            Returns alert when successfully created.
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/alert'
+              meta:
+                type: object
+            title: AlertResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '409':
+          $ref: '#/responses/409'
+      tags:
+        - /alerts/
+  '/alerts/{id}':
+    get:
+      x-controller: AlertController
+      x-method: get
+      operationId: getAlert
+      security:
+        - ApiKeyAuth: []
+      summary: Retrieve an alert
+      parameters:
+        - name: id
+          in: path
+          description: Id of the alert to be retrieved
+          required: true
+          type: string
+      responses:
+        '200':
+          description: |-
+            json:api success
+            Returns the alert object
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/alert'
+              meta:
+                type: object
+            title: AlertResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+      tags:
+        - /alerts/
+    delete:
+      x-controller: AlertController
+      x-method: delete
+      operationId: deleteAlert
+      security:
+        - ApiKeyAuth: []
+      summary: Delete an alert
+      parameters:
+        - name: id
+          in: path
+          description: Id of the alert to be deleted
+          required: true
+          type: string
+      responses:
+        '204':
+          description: |-
+            json:api success
+            No Content
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /alerts/
+  /brands:
+    get:
+      x-controller: BrandController
+      x-method: listBrands
+      operationId: listBrands
+      summary: List brands
+      description: Returns all brands
+      parameters:
+        - name: active
+          in: query
+          description: get only active brands
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: |-
+            json:api success
+            List of brands
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/brand'
+              meta:
+                type: object
+            title: BrandListResponse
+        '400':
+          $ref: '#/responses/400'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /brands/
+  '/brands/{id}/likes':
+    delete:
+      x-controller: LikeController
+      x-method: dislike
+      operationId: dislikeBrand
+      security:
+        - ApiKeyAuth: []
+      summary: Dislike a brand
+      parameters:
+        - name: id
+          in: path
+          description: Id of the brand to dislike
+          required: true
+          type: string
+      responses:
+        '204':
+          description: |-
+            json:api success
+            No Content
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /brands/
+  /breadcrumbs/:
+    get:
+      x-controller: BreadcrumbController
+      x-method: get
+      operationId: getBreadcrumb
+      summary: Get breadcrumb
+      description: >-
+        Return a breadcrumb: an ordered list of url+label to be displayed on the
+        url that is queried (in french: Fil d'ariane)
+      parameters:
+        - name: url
+          in: query
+          description: Url which we want the breadcrumb
+          required: true
+          type: string
+          format: url
+      responses:
+        '200':
+          description: |-
+            json:api success
+            Breadcrumb
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/breadcrumb'
+              meta:
+                type: object
+            title: BreadcrumbResponse
+        '400':
+          $ref: '#/responses/400'
+      tags:
+        - /breadcrumbs/
+  '/campaigns/{id}/':
+    get:
+      x-controller: CampaignController
+      x-method: get
+      operationId: getCampaign
+      summary: Get a campaign by id
+      parameters:
+        - name: id
+          in: path
+          description: Campaign ID to query
+          required: true
+          type: string
+      responses:
+        '200':
+          description: |-
+            json:api success
+            List campaign by ID
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/campaign'
+              meta:
+                type: object
+            title: CampaignResponse
+        '400':
+          $ref: '#/responses/400'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /campaigns/
+  '/comments/{id}/likes':
+    post:
+      x-controller: LikeController
+      x-method: like
+      operationId: likeComment
+      summary: Like a comment
+      description: Add a Like on a comment
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: Comment id
+          required: true
+          type: string
+      responses:
+        '204':
+          description: |-
+            json:api success
+            No Content
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '404':
+          $ref: '#/responses/404'
+        '409':
+          $ref: '#/responses/409'
+      tags:
+        - /comments/
+    delete:
+      x-controller: LikeController
+      x-method: dislike
+      operationId: unlikeComment
+      summary: Unlike a comment
+      description: Delete a Like from a comment
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: Comment id
+          required: true
+          type: string
+      responses:
+        '204':
+          description: |-
+            json:api success
+            No Content
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '404':
+          $ref: '#/responses/404'
+        '409':
+          $ref: '#/responses/409'
+      tags:
+        - /comments/
+  /contents/main-merchandizing:
+    get:
+      x-controller: ContentsController
+      x-method: getMainMerchandizing
+      operationId: getMainMerchandizing
+      summary: Main merchandizing
+      description: Returns main-merchandizing block for homepage
+      parameters: []
+      responses:
+        '200':
+          description: |-
+            json:api success
+            Homepage Main Merchandizing
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/contents_mainMerchandizing'
+              meta:
+                type: object
+            title: ContentsMainMerchandizingResponse
+        '400':
+          $ref: '#/responses/400'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /contents/
+  /contents/editorial-crush:
+    get:
+      x-controller: ContentsController
+      x-method: getEditorialCrush
+      operationId: getEditorialCrush
+      summary: Editorial crush
+      description: Returns editorial-crush block for homepage
+      responses:
+        '200':
+          description: |-
+            json:api success
+            Homepage Editorial Crush
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/contents_editorialCrush'
+              meta:
+                type: object
+            title: ContentsEditorialCrushResponse
+        '400':
+          $ref: '#/responses/400'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /contents/
+  /contents/single-edito:
+    get:
+      x-controller: ContentsController
+      x-method: getSingleEdito
+      operationId: getSingleEdito
+      summary: Single edito
+      description: Returns single-edito block for homepage
+      responses:
+        '200':
+          description: |-
+            json:api success
+            Homepage Single Edito
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/contents_singleEdito'
+              meta:
+                type: object
+            title: ContentsSingleEditoResponse
+        '400':
+          $ref: '#/responses/400'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /contents/
+  /contents/categories:
+    get:
+      x-controller: ContentsController
+      x-method: getCategories
+      operationId: getCategories
+      summary: Homepage categories
+      description: Returns a list of categories for the homepage
+      responses:
+        '200':
+          description: |-
+            json:api success
+            List of homepage categories
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/contents_categories'
+              meta:
+                type: object
+            title: ContentsCategoriesResponse
+        '400':
+          $ref: '#/responses/400'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /contents/
+  /contents/promotional-banners/:
+    get:
+      x-controller: PromotionalBannerController
+      x-method: list
+      operationId: listPromotionalBanners
+      summary: Get promotional banners
+      description: |
+        Returns the active promotional banners for current site and locale.
+      responses:
+        '200':
+          description: |-
+            json:api success
+            The promotional banner
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/contents_promotionalBanner'
+              meta:
+                type: object
+            title: PromotionalBannerResponse
+        '400':
+          $ref: '#/responses/400'
+      tags:
+        - /contents/
+  /contents/payment-methods:
+    get:
+      x-controller: PaymentMethodController
+      x-method: listOffline
+      operationId: getPaymentMethods
+      summary: List payment methods
+      description: >
+        Returns list of accepted payment methods for the currently selected
+        site,
+
+        currency and country.
+      responses:
+        '200':
+          description: |-
+            json:api success
+            Payment methods
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/paymentMethod'
+              meta:
+                $ref: '#/definitions/paginationMetadata'
+            title: PaymentMethodListResponse
+        '400':
+          $ref: '#/responses/400'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /contents/
+      parameters:
+        - $ref: '#/parameters/limit'
+        - $ref: '#/parameters/offset'
+  /contents/welcome-voucher:
+    get:
+      x-controller: ContentsController
+      x-method: getOfflineWelcomeVoucher
+      operationId: getOfflineWelcomeVoucher
+      summary: Retrieve the welcome voucher
+      description: >
+        Returns the welcome voucher if signed-in user is eligible to the welcome
+        program.
+
+        The welcome voucher is related to the site and is only allowed for first
+        purchasing customers.
+      responses:
+        '200':
+          description: |-
+            json:api success
+            Welcome voucher
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/welcomeVoucher'
+              meta:
+                type: object
+            title: WelcomeVoucherResponse
+        '400':
+          $ref: '#/responses/400'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /contents/
+  /contents/catalog-pages:
+    get:
+      x-controller: ContentsController
+      x-method: listCatalogPages
+      operationId: listCatalogPages
+      summary: List catalog pages
+      description: |
+        Returns a list of catalog pages for given path.
+      parameters:
+        - name: path
+          in: query
+          description: Page path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: |-
+            json:api success
+            Matching page
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/catalog-page'
+              meta:
+                type: object
+            title: ContentsCatalogPageResponse
+        '400':
+          $ref: '#/responses/400'
+      tags:
+        - /contents/
+  /contents/type-size:
+    get:
+      x-controller: ContentsController
+      x-method: listTypeSize
+      operationId: listTypeSize
+      summary: List type size
+      description: |
+        Returns list type size by sub category
+      parameters:
+        - name: idSubcategory
+          in: query
+          description: Type Size Path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: |-
+            json:api success
+            Matching type size
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/contents_type-size'
+              meta:
+                type: object
+            title: ContentsTypeSize
+        '400':
+          $ref: '#/responses/400'
+      tags:
+        - /contents/
+  /contents/customer-care:
+    get:
+      x-controller: ContentsController
+      x-method: getCustomerCare
+      operationId: getCustomerCare
+      summary: Get customer care Info
+      description: |
+        Retrieve customer care info
+      responses:
+        '200':
+          description: |-
+            json:api success
+            customer care informations
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/contents_customerCare'
+              meta:
+                type: object
+            title: ContentsCustomerCareResponse
+        '400':
+          $ref: '#/responses/400'
+      tags:
+        - /contents/
+  /contents/reinsurance:
+    get:
+      x-controller: ContentsController
+      x-method: getReinsurance
+      operationId: getReinsurance
+      summary: Get helps information on shipping cost and customer fees
+      description: |
+        Retrieve shipping cost info and customer fees
+      responses:
+        '200':
+          description: |-
+            json:api success
+            shipping cost and customer fees informations
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/reinsurance'
+              meta:
+                type: object
+            title: ReinsuranceMoreInformationResponse
+        '400':
+          $ref: '#/responses/400'
+      tags:
+        - /contents/
+  '/contents/cms/pages/type/{pageType}':
+    get:
+      x-controller: CmsContentsController
+      x-method: getPageTypeContent
+      operationId: getPageTypeContent
+      summary: Get content for a page type with the cms project
+      description: |
+        Get content for a page type with the cms project
+      parameters:
+        - name: pageType
+          in: path
+          description: page type to retrieve
+          required: true
+          type: string
+        - name: x-device-brand
+          in: header
+          description: brand of the device being used ( ios || android || other )
+          required: true
+          type: string
+        - name: x-device-type
+          in: header
+          description: type of the device ( smartphone || desktop || tablet )
+          required: true
+          type: string
+        - name: x-support-type
+          in: header
+          description: suppport being used ( app || web )
+          required: true
+          type: string
+        - name: x-lang-code
+          in: header
+          description: lang being used ( fr_fr || en_en || de_de ... )
+          required: true
+          type: string
+        - name: x-country
+          in: header
+          description: country selected ( FR || EN || UK ... )
+          required: true
+          type: string
+        - name: version
+          in: query
+          required: false
+          type: string
+      responses:
+        '200':
+          description: |-
+            json:api success
+            null
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/contents_pageTypeContent'
+              meta:
+                type: object
+            title: ContentPageTypeResponse
+        '400':
+          $ref: '#/responses/400'
+      tags:
+        - /contents/
+  '/contents/cms/pages/url/{pageUrl}':
+    get:
+      x-controller: CmsContentsController
+      x-method: getPageUrlContent
+      operationId: getPageUrlContent
+      summary: Get content for a page type with the cms project
+      description: |
+        Get content for a page type with the cms project
+      parameters:
+        - name: pageUrl
+          in: path
+          description: url of a page ( not of type home ) to retrieve in cms
+          required: true
+          type: string
+        - name: x-device-brand
+          in: header
+          description: brand of the device being used ( ios || android || other )
+          required: true
+          type: string
+        - name: x-device-type
+          in: header
+          description: type of the device ( smartphone || desktop || tablet )
+          required: true
+          type: string
+        - name: x-support-type
+          in: header
+          description: suppport being used ( app || web )
+          required: true
+          type: string
+        - name: x-lang-code
+          in: header
+          description: lang being used ( fr_fr || en_en || de_de ... )
+          required: true
+          type: string
+        - name: x-country
+          in: header
+          description: country selected ( FR || EN || UK ... )
+          required: true
+          type: string
+        - name: version
+          in: query
+          required: false
+          type: string
+      responses:
+        '200':
+          description: |-
+            json:api success
+            null
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/contents_pageTypeContent'
+              meta:
+                type: object
+            title: ContentPageTypeResponse
+        '400':
+          $ref: '#/responses/400'
+      tags:
+        - /contents/
+  '/contents/cms/pages/{pageId}':
+    get:
+      x-controller: CmsContentsController
+      x-method: getPageIdContent
+      operationId: getPageIdContent
+      summary: Get content for a page by its ID with the cms project
+      description: |
+        Get content for a page by its ID with the cms project
+      parameters:
+        - name: pageId
+          in: path
+          description: url of a page ( not of type home ) to retrieve in cms
+          required: true
+          type: string
+        - name: x-device-brand
+          in: header
+          description: brand of the device being used ( ios || android || other )
+          required: true
+          type: string
+        - name: x-device-type
+          in: header
+          description: type of the device ( smartphone || desktop || tablet )
+          required: true
+          type: string
+        - name: x-support-type
+          in: header
+          description: suppport being used ( app || web )
+          required: true
+          type: string
+        - name: x-lang-code
+          in: header
+          description: lang being used ( fr_fr || en_en || de_de ... )
+          required: true
+          type: string
+        - name: x-country
+          in: header
+          description: country selected ( FR || EN || UK ... )
+          required: true
+          type: string
+        - name: version
+          in: query
+          required: false
+          type: string
+      responses:
+        '200':
+          description: |-
+            json:api success
+            null
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/contents_pageTypeContent'
+              meta:
+                type: object
+            title: ContentPageTypeResponse
+        '400':
+          $ref: '#/responses/400'
+      tags:
+        - /contents/
+  '/contents/deeplink/{url}':
+    get:
+      x-controller: CmsContentsController
+      x-method: getDeeplink
+      operationId: getDeeplink
+      summary: Get deeplink for an url
+      description: get deeplink related for an url
+      parameters:
+        - name: url
+          in: path
+          description: url to translate to deeplink
+          type: string
+          required: true
+      responses:
+        '200':
+          description: |-
+            json:api success
+            null
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/contents_deeplink'
+              meta:
+                type: object
+            title: ContentDeeplinkResponse
+        '400':
+          $ref: '#/responses/400'
+      tags:
+        - /contents/
+  /contents/editorial-list:
+    get:
+      x-controller: CmsContentsController
+      x-method: getEditorialList
+      operationId: getEditorialList
+      summary: Get editorial post list
+      description: Retrieve the last editorial posts
+      parameters:
+        - name: limit
+          in: query
+          description: Post number limit
+          type: string
+          required: true
+      responses:
+        '200':
+          description: |-
+            json:api success
+            null
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/contents_editorialList'
+              meta:
+                type: object
+            title: ContentEditorialListResponse
+        '400':
+          $ref: '#/responses/400'
+      tags:
+        - /contents/
+  /catalog/facet-links:
+    get:
+      x-controller: FacetLinksController
+      x-method: getFacetLinks
+      operationId: getFacetLinks
+      summary: SEO facet links
+      description: Returns a list of facet links
+      parameters:
+        - name: path
+          in: query
+          description: Page path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: |-
+            json:api success
+            Catlog facet links
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/catalog_facetLink'
+              meta:
+                type: object
+            title: FacetLinksResponse
+        '400':
+          $ref: '#/responses/400'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /catalog/
+  /negotiations/:
+    get:
+      x-controller: NegotiationController
+      x-method: list
+      operationId: listNegotiations
+      security:
+        - ApiKeyAuth: []
+      summary: Get a list of negotiations
+      description: Returns a list of negotiations for currently signed-in user.
+      parameters:
+        - name: role
+          in: query
+          description: |
+            Filter by user role.
+            Returns both buyer and seller initiated negotiations by default.
+          required: false
+          default: both
+          type: string
+          enum:
+            - buyer
+            - seller
+            - both
+        - name: withEvents
+          in: query
+          description: 'If true, returns events'
+          type: boolean
+          default: false
+          required: false
+        - name: activityStatus
+          in: query
+          description: >
+            active (default): returns only active negotiations (max 1 per
+            product+buyer)
+
+            activeAndRecentlyClosed: returns closed negotiations as well, but
+            only if closed recently (less than 7 days ago)
+
+            all: all activity status (active and closed, regardless of when it
+            happened)
+          type: string
+          enum:
+            - active
+            - activeAndRecentlyClosed
+            - all
+          default: active
+          required: false
+        - $ref: '#/parameters/limit'
+        - $ref: '#/parameters/offset'
+      responses:
+        '200':
+          description: |-
+            json:api success
+            Returns a list of negotiations
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/negotiation'
+              meta:
+                $ref: '#/definitions/paginationMetadata'
+            title: NegotiationListResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+      tags:
+        - /negotiations/
+  '/products/{productId}/active-negotiation':
+    get:
+      x-controller: NegotiationController
+      x-method: getActive
+      operationId: getActiveNegotiation
+      security:
+        - ApiKeyAuth: []
+      summary: Returns the active negotiation for currently signed-in buyer.
+      description: Returns the active negotiation for currently signed-in buyer.
+      parameters:
+        - name: productId
+          in: path
+          description: Product
+          required: true
+          type: string
+        - name: withEvents
+          in: query
+          description: 'If true, returns events'
+          type: boolean
+          default: false
+          required: false
+      responses:
+        '200':
+          description: |-
+            json:api success
+            Returns the active negotiation for buyer
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/negotiation'
+              meta:
+                type: object
+            title: NegotiationResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /products/
+  '/products/{productId}/negotiations':
+    post:
+      x-controller: NegotiationController
+      x-method: create
+      operationId: createNegotiation
+      security:
+        - ApiKeyAuth: []
+      summary: Start a new negotiation
+      parameters:
+        - name: productId
+          in: path
+          description: Product
+          required: true
+          type: string
+        - name: payload
+          in: body
+          schema:
+            type: object
+            title: NegotiationRequest
+            required:
+              - offerInWholeNumber
+            properties:
+              offerInWholeNumber:
+                $ref: '#/definitions/amountInWholeNumber'
+                description: 'Offer price in current currency, without cents (127 for 127€)'
+              buyerId:
+                type: string
+                description: 'Buyer account id, only if negotiation is initiated by seller'
+      responses:
+        '201':
+          description: |-
+            json:api success
+            Created negotiation
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/negotiation'
+              meta:
+                type: object
+            title: NegotiationResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+      tags:
+        - /products/
+  '/negotiations/{id}':
+    get:
+      x-controller: NegotiationController
+      x-method: get
+      operationId: getNegotiation
+      security:
+        - ApiKeyAuth: []
+      summary: Returns a single negotiation
+      parameters:
+        - name: id
+          in: path
+          description: ID of the negotiation to fetch
+          required: true
+          type: string
+        - name: withEvents
+          in: query
+          description: List all the events of the negotiation
+          required: false
+          default: false
+          type: string
+      responses:
+        '200':
+          description: |-
+            json:api success
+            Negotiation
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/negotiation'
+              meta:
+                type: object
+            title: NegotiationResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /negotiations/
+  '/negotiations/{id}/events/':
+    post:
+      x-controller: NegotiationController
+      x-method: addEvent
+      operationId: addNegotiationEvent
+      security:
+        - ApiKeyAuth: []
+      summary: Add an event to a negotiation
+      description: 'Add an event to a negotiation (accept, reject or add offer)'
+      parameters:
+        - name: id
+          in: path
+          description: Id of the negotiation
+          required: true
+          type: string
+        - name: payload
+          in: body
+          schema:
+            type: object
+            title: NegotiationEventRequest
+            required:
+              - action
+            properties:
+              action:
+                type: string
+                description: 'Type of action (''accept'', ''reject'' or ''offer'')'
+                enum:
+                  - accept
+                  - reject
+                  - offer
+              offerInWholeNumber:
+                $ref: '#/definitions/amountInWholeNumber'
+                description: 'Offer price in current currency, without cents (127 for 127€)'
+      responses:
+        '201':
+          description: |-
+            json:api success
+            Updated negotitiation
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/negotiation'
+              meta:
+                type: object
+            title: NegotiationEventResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /negotiations/
+  /newsletter-subscribers/:
+    post:
+      x-controller: NewsletterRegistrationController
+      x-method: subscribe
+      operationId: subscribeNewsletter
+      summary: Register an email to the newsletter
+      parameters:
+        - name: payload
+          in: body
+          description: Newsletter registration
+          schema:
+            $ref: '#/definitions/newsletter-registration'
+      responses:
+        '201':
+          description: |-
+            json:api success
+            Registration recorded (and email was unknown)
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/newsletter-registration'
+              meta:
+                type: object
+            title: NewsletterRegistrationResponse
+        '400':
+          $ref: '#/responses/400'
+      tags:
+        - /newsletter-subscribers/
+  /notifications/:
+    get:
+      x-controller: NotificationController
+      x-method: list
+      operationId: listNotifications
+      security:
+        - ApiKeyAuth: []
+      summary: Returns a list of notifications
+      parameters:
+        - $ref: '#/parameters/limit'
+        - $ref: '#/parameters/offset'
+      responses:
+        '200':
+          description: |-
+            json:api success
+            List of notifications
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/notification'
+              meta:
+                $ref: '#/definitions/paginationMetadata'
+            title: NotificationListResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+      tags:
+        - /notifications/
+    patch:
+      x-controller: NotificationController
+      x-method: updateList
+      operationId: updateNotifications
+      security:
+        - ApiKeyAuth: []
+      summary: Notifications Ids to mark as viewed
+      parameters:
+        - name: payload
+          in: body
+          required: true
+          schema:
+            type: object
+            title: ViewedNotificationIds
+            required:
+              - idsItem
+            properties:
+              viewed:
+                type: array
+                items:
+                  type: string
+      responses:
+        '201':
+          description: |-
+            json:api success
+            No content
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/responses_emptyResponse'
+              meta:
+                type: object
+            title: EmptyResponse
+        '204':
+          description: |-
+            json:api success
+            No Content
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /notifications/
+  '/notifications/{id}':
+    patch:
+      x-controller: NotificationController
+      x-method: update
+      operationId: updateNotification
+      security:
+        - ApiKeyAuth: []
+      summary: Mark notification Id as viewed or read (default read)
+      parameters:
+        - name: id
+          in: path
+          description: Notification Id to mark as viewed or read
+          required: true
+          type: string
+        - name: payload
+          in: body
+          required: false
+          schema:
+            type: object
+            title: NotificationUpdateRequest
+            properties:
+              viewed:
+                type: boolean
+      responses:
+        '201':
+          description: |-
+            json:api success
+            No content
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/responses_emptyResponse'
+              meta:
+                type: object
+            title: EmptyResponse
+        '204':
+          description: |-
+            json:api success
+            No Content
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /notifications/
+  /orders/current:
+    get:
+      x-controller: CartController
+      x-method: get
+      operationId: getCart
+      security:
+        - ApiKeyAuth: []
+      summary: Returns cart content
+      responses:
+        '200':
+          description: |-
+            json:api success
+            Return user's cart content
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/order'
+              meta:
+                type: object
+            title: OrderResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /orders/
+  /orders/current/order-lines:
+    post:
+      x-controller: CartController
+      x-method: addProduct
+      operationId: addProductToCart
+      security:
+        - ApiKeyAuth: []
+      summary: Add product to user's cart
+      parameters:
+        - name: payload
+          in: body
+          description: Product ID
+          schema:
+            type: object
+            title: OrderAddProductRequest
+            required:
+              - idProduct
+            properties:
+              idProduct:
+                type: string
+      responses:
+        '201':
+          description: |-
+            json:api success
+            Return order Line
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/orderLine'
+              meta:
+                type: object
+            title: OrderLineIdResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '404':
+          $ref: '#/responses/404'
+        '409':
+          $ref: '#/responses/409'
+      tags:
+        - /orders/
+  '/orders/current/order-lines/{id}':
+    delete:
+      x-controller: CartController
+      x-method: removeProduct
+      operationId: removeProductFromCart
+      security:
+        - ApiKeyAuth: []
+      summary: Remove product from user's cart
+      parameters:
+        - name: id
+          in: path
+          description: Order line ID
+          required: true
+          type: string
+      responses:
+        '204':
+          description: |-
+            json:api success
+            No Content
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /orders/
+  '/orders/current/order-lines/{id}/{shippingOption}':
+    post:
+      x-controller: CartController
+      x-method: updateProduct
+      operationId: updateProductDelivery
+      security:
+        - ApiKeyAuth: []
+      summary: Update product delivery method from user's cart
+      parameters:
+        - name: id
+          in: path
+          description: Order line ID
+          required: true
+          type: string
+        - name: shippingOption
+          in: path
+          description: Choosen shipping option for product
+          required: true
+          type: string
+      responses:
+        '200':
+          description: |-
+            json:api success
+            Return user's cart content
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/order_planUpdate'
+              meta:
+                type: object
+            title: OrderPlanUpdateResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '404':
+          $ref: '#/responses/404'
+        '409':
+          $ref: '#/responses/409'
+      tags:
+        - /orders/
+  /payment-methods/:
+    get:
+      x-controller: PaymentMethodController
+      x-method: list
+      operationId: listPaymentMethods
+      security:
+        - ApiKeyAuth: []
+      summary: List payment methods
+      description: Returns all allowed payment method for UserMe
+      parameters:
+        - $ref: '#/parameters/limit'
+        - $ref: '#/parameters/offset'
+      responses:
+        '200':
+          description: |-
+            json:api success
+            payment method response
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/paymentMethod'
+              meta:
+                $ref: '#/definitions/paginationMetadata'
+            title: PaymentMethodListResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /payment-methods/
+  '/payment-methods/{id}':
+    get:
+      x-controller: PaymentMethodController
+      x-method: get
+      operationId: getPaymentMethod
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: The id of a paymentMethod
+          required: true
+          type: string
+      summary: return a specific payment method
+      responses:
+        '200':
+          description: |-
+            json:api success
+            payment method response
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/paymentMethod'
+              meta:
+                type: object
+            title: PaymentMethodResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+      tags:
+        - /payment-methods/
+  /shipping-plan/eligibility:
+    get:
+      x-controller: ShippingPlanController
+      x-method: get
+      operationId: getShippingEligibility
+      summary: Shipping Eligibility
+      description: Returns a Shipping Eligibility for a country
+      parameters:
+        - name: country
+          in: query
+          description: ISO Country Code
+          required: true
+          type: string
+      responses:
+        '200':
+          description: |-
+            json:api success
+            Shipping Plan
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/shippingPlan'
+              meta:
+                type: object
+            title: ShippingPlanResponse
+        '400':
+          $ref: '#/responses/400'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /shipping-plan/
+  /prices/:
+    get:
+      x-controller: PriceController
+      x-method: get
+      operationId: getPrice
+      summary: pvn estimated
+      description: return the pvn (seller's share)
+      parameters:
+        - name: price
+          in: query
+          required: true
+          type: string
+        - name: currency
+          in: query
+          required: false
+          type: string
+          description: defaults to user's currency (i18n)
+        - name: idProduct
+          in: query
+          required: false
+          type: string
+        - name: idClient
+          in: query
+          required: false
+          type: string
+      responses:
+        '200':
+          description: |-
+            json:api success
+            return the pvn
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/commission'
+              meta:
+                type: object
+            title: PriceResponse
+        '400':
+          $ref: '#/responses/400'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /prices/
+  '/products/{id}/similar-products':
+    get:
+      x-controller: ProductController
+      x-method: listSimilarProducts
+      operationId: listSimilarProducts
+      summary: List similar products
+      parameters:
+        - name: id
+          in: path
+          description: Product Id
+          required: true
+          type: string
+        - $ref: '#/parameters/limit'
+        - $ref: '#/parameters/offset'
+      responses:
+        '200':
+          description: |-
+            json:api success
+            List of similar products
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/product'
+              meta:
+                $ref: '#/definitions/paginationMetadata'
+            title: ProductListResponse
+        '400':
+          $ref: '#/responses/400'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /products/
+  '/products/{id}/associated-products':
+    get:
+      x-controller: ProductController
+      x-method: listAssociatedProducts
+      operationId: listAssociatedProducts
+      summary: List associated products
+      description: Returns associated products (To wear with)
+      parameters:
+        - name: id
+          in: path
+          description: Product Id
+          required: true
+          type: string
+        - $ref: '#/parameters/limit'
+        - $ref: '#/parameters/offset'
+      responses:
+        '200':
+          description: |-
+            json:api success
+            List of associated products (To wear with)
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/product'
+              meta:
+                $ref: '#/definitions/paginationMetadata'
+            title: ProductListResponse
+        '400':
+          $ref: '#/responses/400'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /products/
+  '/products/{id}/shipping-voucher':
+    get:
+      x-controller: ProductController
+      x-method: getShippingVoucher
+      operationId: getShippingVoucher
+      security:
+        - ApiKeyAuth: []
+      summary: Return shipping voucher path of sold product
+      description: Return shipping voucher path of sold product
+      parameters:
+        - name: id
+          in: path
+          description: Product Id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: |-
+            json:api success
+            Return shipping voucher path of sold product
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/url'
+              meta:
+                type: object
+            title: ShippingVoucherResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /products/
+  '/products/{id}':
+    get:
+      x-controller: ProductController
+      x-method: get
+      operationId: getProduct
+      summary: Returns a single product
+      parameters:
+        - name: id
+          in: path
+          description: Id of the product to retrieve
+          required: true
+          type: string
+          format: string
+        - name: isoCountry
+          in: query
+          description: iso country for installment
+          required: false
+          type: string
+          format: string
+      responses:
+        '200':
+          description: |-
+            json:api success
+            Product
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/product'
+              meta:
+                type: object
+            title: ProductResponse
+        '400':
+          $ref: '#/responses/400'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /products/
+  '/products/{id}/photo':
+    post:
+      x-controller: ProductController
+      x-method: addPhotoProduct
+      operationId: addPhotoProduct
+      summary: Add photo to a product
+      description: Add a photo to an existing product
+      security:
+        - ApiKeyAuth: []
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: id
+          in: path
+          description: Id of the product
+          required: true
+          type: string
+          format: string
+        - name: payload
+          in: body
+          schema:
+            type: string
+            format: binary
+      responses:
+        '201':
+          description: |-
+            json:api success
+            success posted photo
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                type: object
+              meta:
+                type: object
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+      tags:
+        - /products/
+  '/products/{id}/reservation':
+    get:
+      x-controller: ProductController
+      x-method: getProductReservation
+      operationId: getProductReservation
+      summary: Check product reservation status
+      description: |
+        A product can be reserved either manually by a premium member
+        or automatically following a successful negotiation.
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: id
+          in: path
+          type: string
+          description: Id of the product to be checked
+          required: true
+      responses:
+        '200':
+          description: |-
+            json:api success
+            The reservation details if a reservation exists
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/product_reservation'
+              meta:
+                type: object
+            title: ProductReservationResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /products/
+  '/products/{id}/condition-details':
+    get:
+      x-controller: ProductController
+      x-method: getProductConditionDetails
+      operationId: getProductConditionDetails
+      summary: Get product condition levels
+      description: |
+        Returns a list of condition levels for a product.
+      parameters:
+        - name: id
+          in: path
+          description: The Id of product for which to get condition levels.
+          required: true
+          type: string
+      responses:
+        '200':
+          description: |-
+            json:api success
+            Returns product condition levels
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/product_conditionLevel'
+              meta:
+                type: object
+            title: ProductConditionDetailsResponse
+        '400':
+          $ref: '#/responses/400'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /products/
+  '/products/{id}/likes':
+    post:
+      x-controller: LikeController
+      x-method: like
+      operationId: likeProduct
+      summary: Like a product
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: Product to like Id
+          required: true
+          type: string
+      responses:
+        '204':
+          description: |-
+            json:api success
+            No Content
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '404':
+          $ref: '#/responses/404'
+        '409':
+          $ref: '#/responses/409'
+      tags:
+        - /products/
+    delete:
+      x-controller: LikeController
+      x-method: dislike
+      operationId: unlikeProduct
+      summary: Unlike a product
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: Product to dislike Id
+          required: true
+          type: string
+      responses:
+        '204':
+          description: |-
+            json:api success
+            No Content
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '404':
+          $ref: '#/responses/404'
+        '409':
+          $ref: '#/responses/409'
+      tags:
+        - /products/
+  '/products/{productId}/comments':
+    get:
+      x-controller: CommentController
+      x-method: list
+      operationId: listProductComents
+      summary: List a product comments
+      description: Returns a list of comment for a given product
+      parameters:
+        - name: productId
+          in: path
+          description: Product ID
+          required: true
+          type: string
+          minimum: 1
+        - $ref: '#/parameters/limit'
+        - $ref: '#/parameters/offset'
+      responses:
+        '200':
+          description: |-
+            json:api success
+            List of comment
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/comment'
+              meta:
+                $ref: '#/definitions/paginationMetadata'
+            title: CommentListResponse
+        '400':
+          $ref: '#/responses/400'
+      tags:
+        - /products/
+    post:
+      x-controller: CommentController
+      x-method: create
+      operationId: createProductComment
+      summary: Add a comment on a product
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: productId
+          in: path
+          description: The id of a product
+          required: true
+          type: string
+          minimum: 1
+        - name: payload
+          in: body
+          description: Comment of a product
+          schema:
+            type: object
+            title: CommentForm
+            required:
+              - text
+            properties:
+              text:
+                type: string
+      responses:
+        '201':
+          description: |-
+            json:api success
+            result
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/comment'
+              meta:
+                type: object
+            title: CommentResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '404':
+          $ref: '#/responses/404'
+        '409':
+          $ref: '#/responses/409'
+      tags:
+        - /products/
+  '/products/{id}/shippings':
+    get:
+      x-controller: ShippingController
+      x-method: productShipping
+      operationId: getProductShippingInformation
+      summary: Get product shipping information
+      parameters:
+        - name: id
+          in: path
+          description: The id of a product
+          required: true
+          type: string
+        - name: isoCountry
+          in: query
+          description: country iso code
+          required: true
+          type: string
+      responses:
+        '200':
+          description: |-
+            json:api success
+            result
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/shipping'
+              meta:
+                type: object
+            title: ShippingResponse
+        '400':
+          $ref: '#/responses/400'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /products/
+  '/products/{id}/reports/':
+    post:
+      x-controller: ReportController
+      x-method: report
+      operationId: reportProduct
+      summary: Report a product
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: The id of a product to report
+          required: true
+          type: string
+        - name: typeId
+          in: query
+          description: item type for the report
+          type: string
+        - name: payload
+          in: body
+          description: Report message
+          schema:
+            $ref: '#/definitions/productReport'
+      responses:
+        '201':
+          description: |-
+            json:api success
+            Report is successfully created
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/productReport'
+              meta:
+                type: object
+            title: ProductReportResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '409':
+          $ref: '#/responses/409'
+      tags:
+        - /products/
+  '/products/{productId}/comments/{commentId}/translation':
+    get:
+      x-controller: TranslationController
+      x-method: translate
+      operationId: translation
+      summary: translate a comment
+      description: Returns a comment translation
+      parameters:
+        - name: commentId
+          in: path
+          description: Comment ID
+          required: true
+          type: string
+          minimum: 1
+        - name: productId
+          in: path
+          description: Product ID
+          required: true
+          type: string
+          minimum: 1
+      responses:
+        '200':
+          description: |-
+            json:api success
+            Comment translation
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                properties:
+                  id:
+                    type: string
+                    example: '1234'
+                  translation:
+                    type: string
+                    example: 'J''ai pris 2 photos, elles seront bientôt postés'
+              meta:
+                type: object
+            title: commentsTranslationResponse
+        '400':
+          $ref: '#/responses/400'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /products/
+  '/products/{productId}/price-drop-alerts/':
+    delete:
+      x-controller: AlertController
+      x-method: deletePriceDrop
+      operationId: deletePriceDrop
+      security:
+        - ApiKeyAuth: []
+      summary: Product Price drop unfollow
+      parameters:
+        - name: productId
+          in: path
+          description: Product ID
+          required: true
+          type: string
+          minimum: 1
+      responses:
+        '204':
+          description: |-
+            json:api success
+            No Content
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+      tags:
+        - /products/
+  '/products/{productId}/translation':
+    get:
+      x-controller: TranslationController
+      x-method: translate
+      operationId: translateProduct
+      summary: translate a description
+      description: Returns a description translation
+      parameters:
+        - name: productId
+          in: path
+          description: Product ID
+          required: true
+          type: string
+          minimum: 1
+      responses:
+        '200':
+          description: |-
+            json:api success
+            description translation
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                properties:
+                  id:
+                    type: string
+                    example: '1234'
+                  translation:
+                    type: string
+                    example: Broche double plaquée or Chanel utilisée
+              meta:
+                type: object
+            title: productTranslationResponse
+        '400':
+          $ref: '#/responses/400'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /products/
+  /reset-password-requests/:
+    post:
+      x-controller: UserController
+      x-method: resetPasswordRequest
+      operationId: requestPasswordReset
+      summary: Send an e-mail to the user if the email exist
+      parameters:
+        - name: payload
+          in: body
+          description: User's email
+          schema:
+            $ref: '#/definitions/resetPasswordRequest'
+      responses:
+        '201':
+          description: |-
+            json:api success
+            Reset password email successfully sent
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/resetPasswordRequest'
+              meta:
+                type: object
+            title: ResetPasswordRequestResponse
+        '400':
+          $ref: '#/responses/400'
+        '404':
+          $ref: '#/responses/404'
+        '409':
+          $ref: '#/responses/409'
+      tags:
+        - /reset-password-requests/
+  /sessions/:
+    post:
+      x-controller: UserController
+      x-method: login
+      operationId: createSession
+      summary: Log-in (create a new session)
+      parameters:
+        - name: payload
+          in: body
+          schema:
+            $ref: '#/definitions/credentials'
+      responses:
+        '201':
+          description: |-
+            json:api success
+            Successfully logged-in
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/session'
+              meta:
+                type: object
+            title: SessionResponse
+        '400':
+          $ref: '#/responses/400'
+        '409':
+          $ref: '#/responses/409'
+      tags:
+        - /sessions/
+  '/sessions/{sessionId}':
+    delete:
+      x-controller: UserController
+      x-method: logout
+      operationId: deleteSession
+      parameters:
+        - name: sessionId
+          in: path
+          description: Session id
+          required: true
+          type: string
+      security:
+        - ApiKeyAuth: []
+      summary: Delete an user session (log-out)
+      responses:
+        '204':
+          description: |-
+            json:api success
+            No Content
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+      tags:
+        - /sessions/
+  /shipping-methods/:
+    get:
+      x-controller: ShippingMethodController
+      x-method: list
+      operationId: listShippingMethods
+      security:
+        - ApiKeyAuth: []
+      summary: List shipping methods
+      description: Returns available shipping methods for current order.
+      parameters:
+        - $ref: '#/parameters/limit'
+        - $ref: '#/parameters/offset'
+      responses:
+        '200':
+          description: |-
+            json:api success
+            List of shipping methods
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/shipping_method'
+              meta:
+                $ref: '#/definitions/paginationMetadata'
+            title: ShippingMethodListResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /shipping-methods/
+  '/shipping-methods/{id}':
+    get:
+      x-controller: ShippingMethodController
+      x-method: get
+      operationId: getShippingMethod
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: The Id of a shipping method
+          required: true
+          type: string
+      summary: Retrieve a shipping method
+      description: Returns information about a specific shipping method.
+      responses:
+        '200':
+          description: |-
+            json:api success
+            A shipping method
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/shipping_method'
+              meta:
+                type: object
+            title: ShippingMethodResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /shipping-methods/
+  '/users/{id}':
+    get:
+      x-controller: UserController
+      x-method: get
+      operationId: getUser
+      security:
+        - ApiKeyAuth: []
+      summary: Retrieve a single user
+      description: Returns public info about a single user
+      parameters:
+        - name: id
+          in: path
+          description: ID of the user
+          required: true
+          type: string
+          x-accept-me: true
+      responses:
+        '200':
+          description: |-
+            json:api success
+            Returns user if exists
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/user'
+              meta:
+                type: object
+            title: UserResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /users/
+  '/users/{id}/followers/':
+    get:
+      x-controller: SocialController
+      x-method: getFollowers
+      operationId: getFollowers
+      security:
+        - ApiKeyAuth: []
+      summary: List followers of a user
+      description: >
+        Returns a list of users who are following the specified user.
+
+
+        You can list user who are following the authenticated user using the
+        `me` special key.
+
+        ```
+
+        GET /users/me/followers/
+
+        ```
+      parameters:
+        - name: id
+          in: path
+          description: The Id of the user for whom to return results.
+          required: true
+          type: string
+          x-accept-me: true
+      responses:
+        '200':
+          description: |-
+            json:api success
+            Returns the list of users
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/user_social'
+              meta:
+                type: object
+            title: UserSocialResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /users/
+    post:
+      x-controller: UserController
+      x-method: follow
+      operationId: follow
+      security:
+        - ApiKeyAuth: []
+      summary: Follow a user
+      parameters:
+        - name: id
+          in: path
+          description: The Id of the user to follow
+          required: true
+          type: string
+      responses:
+        '201':
+          description: |-
+            json:api success
+            No Content
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/responses_emptyResponse'
+              meta:
+                type: object
+            title: EmptyResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '409':
+          $ref: '#/responses/409'
+      tags:
+        - /users/
+  '/users/{id}/followers/me':
+    delete:
+      x-controller: UserController
+      x-method: unfollow
+      operationId: unfollow
+      security:
+        - ApiKeyAuth: []
+      summary: Unfollow a user
+      parameters:
+        - name: id
+          in: path
+          description: The Id of the user to unfollow
+          required: true
+          type: string
+      responses:
+        '204':
+          description: |-
+            json:api success
+            No Content
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '409':
+          $ref: '#/responses/409'
+      tags:
+        - /users/
+  '/users/{id}/viewed-products':
+    get:
+      x-controller: ProductController
+      x-method: getViewedProducts
+      operationId: getViewedProducts
+      security:
+        - ApiKeyAuth: []
+      summary: List recently viewed products
+      parameters:
+        - name: id
+          in: path
+          description: ID of the user
+          required: true
+          type: string
+          x-accept-me: true
+        - $ref: '#/parameters/limit'
+        - $ref: '#/parameters/offset'
+      responses:
+        '200':
+          description: |-
+            json:api success
+            List of viewed products
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/product'
+              meta:
+                $ref: '#/definitions/paginationMetadata'
+            title: ProductListResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /users/
+  '/users/{id}/liked-products':
+    get:
+      x-controller: LikeController
+      x-method: listLikeProduct
+      operationId: listLikeProduct
+      security:
+        - ApiKeyAuth: []
+      summary: Returns user's liked product list
+      parameters:
+        - name: id
+          in: path
+          description: ID of the user
+          required: true
+          type: string
+          x-accept-me: true
+        - $ref: '#/parameters/limit'
+        - $ref: '#/parameters/offset'
+      responses:
+        '200':
+          description: |-
+            json:api success
+            product listing
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/product'
+              meta:
+                $ref: '#/definitions/paginationMetadata'
+            title: LikedProductListResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+      tags:
+        - /users/
+  '/users/{id}/wishlist':
+    get:
+      x-controller: WishlistController
+      x-method: get
+      operationId: getWishlist
+      security:
+        - ApiKeyAuth: []
+      summary: Returns user's wishlist
+      parameters:
+        - name: id
+          in: path
+          description: ID of the user
+          required: true
+          type: string
+          x-accept-me: true
+        - name: order
+          in: query
+          description: Result order
+          required: false
+          type: string
+          enum:
+            - date
+            - dateDesc
+            - price
+            - priceDesc
+            - view
+          default: date
+        - $ref: '#/parameters/limit'
+        - $ref: '#/parameters/offset'
+      responses:
+        '200':
+          description: |-
+            json:api success
+            product listing
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/product'
+              meta:
+                $ref: '#/definitions/paginationMetadata'
+            title: WishlistListResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+      tags:
+        - /users/
+  /users/me/wishlist:
+    post:
+      x-controller: WishlistController
+      x-method: add
+      operationId: addProductToWishlist
+      security:
+        - ApiKeyAuth: []
+      summary: Add product to wishlist
+      parameters:
+        - name: payload
+          in: body
+          description: Product ID to add to wishlist
+          schema:
+            type: object
+            title: WishlistAddRequest
+            required:
+              - idProduct
+            properties:
+              idProduct:
+                type: string
+      responses:
+        '201':
+          description: |-
+            json:api success
+            No Content
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/responses_emptyResponse'
+              meta:
+                type: object
+            title: EmptyResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+      tags:
+        - /users/
+  '/users/me/wishlist/{idProduct}':
+    delete:
+      x-controller: WishlistController
+      x-method: remove
+      operationId: removeProductFromWishlist
+      security:
+        - ApiKeyAuth: []
+      summary: Remove product from wishlist
+      parameters:
+        - name: idProduct
+          in: path
+          description: Product ID to remove from wishlist
+          required: true
+          type: string
+      responses:
+        '204':
+          description: |-
+            json:api success
+            No Content
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+      tags:
+        - /users/
+  '/users/{id}/member-follows':
+    get:
+      x-controller: UserController
+      x-method: getMemberFollows
+      operationId: getMemberFollows
+      security:
+        - ApiKeyAuth: []
+      summary: Members follow
+      parameters:
+        - name: id
+          in: path
+          description: ID of the user
+          required: true
+          type: string
+          x-accept-me: true
+      description: |
+        Returns products ids of members follows
+      responses:
+        '200':
+          description: |-
+            json:api success
+            Followers members ids
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/user_follows'
+              meta:
+                type: object
+            title: UserFollowResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+      tags:
+        - /users/
+  /users/me/settings:
+    get:
+      x-controller: UserController
+      x-method: getSettings
+      operationId: getUserSettings
+      security:
+        - ApiKeyAuth: []
+      summary: Returns settings
+      description: Returns settings for the authenticating user.
+      responses:
+        '200':
+          description: |-
+            json:api success
+            OK
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/i18n'
+              meta:
+                type: object
+            title: I18nResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /users/
+    patch:
+      x-controller: UserController
+      x-method: updateSettings
+      operationId: updateUserSettings
+      security:
+        - ApiKeyAuth: []
+      summary: Update settings
+      description: Updates the authenticated user's settings.
+      parameters:
+        - name: payload
+          in: body
+          description: User's settings
+          schema:
+            $ref: '#/definitions/i18n'
+      responses:
+        '200':
+          description: |-
+            json:api success
+            OK
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/i18n'
+              meta:
+                type: object
+            title: I18nResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /users/
+  /users/me/wallet:
+    get:
+      x-controller: UserController
+      x-method: getWallet
+      operationId: getWallet
+      security:
+        - ApiKeyAuth: []
+      summary: Retrieve current user's wallet
+      responses:
+        '200':
+          description: |-
+            json:api success
+            Current user's wallet
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/wallet'
+              meta:
+                type: object
+            title: WalletResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /users/
+  /users/me/welcome-voucher:
+    get:
+      x-controller: UserController
+      x-method: getWelcomeVoucher
+      operationId: getWelcomeVoucher
+      security:
+        - ApiKeyAuth: []
+      summary: Retrieve the welcome voucher
+      description: >
+        Returns the welcome voucher if signed-in user is eligible to the welcome
+        program.
+
+        The welcome voucher is related to the site and is only allowed for first
+        purchasing customers.
+      responses:
+        '200':
+          description: |-
+            json:api success
+            Welcome voucher
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/welcomeVoucher'
+              meta:
+                type: object
+            title: WelcomeVoucherResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '404':
+          $ref: '#/responses/404'
+      tags:
+        - /users/
+  /users/me/likes:
+    get:
+      x-controller: UserController
+      x-method: getLikes
+      operationId: getLikes
+      security:
+        - ApiKeyAuth: []
+      summary: Liked items
+      description: |
+        Returns the liked items as an array for type id
+      responses:
+        '200':
+          description: |-
+            json:api success
+            Liked Items
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/user_likes'
+              meta:
+                type: object
+            title: LikedItemsResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+      tags:
+        - /users/
+  /users/me/price-drop-alerts:
+    get:
+      x-controller: UserController
+      x-method: getPriceDrop
+      operationId: getPriceDrop
+      security:
+        - ApiKeyAuth: []
+      summary: Price drop follow
+      description: |
+        Returns products ids of price drop followed
+      responses:
+        '200':
+          description: |-
+            json:api success
+            Followed price drop products id
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/user_pricedrop'
+              meta:
+                type: object
+            title: PriceDropResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+      tags:
+        - /users/
+  /users/me/wishes:
+    get:
+      x-controller: UserController
+      x-method: getWishesProduct
+      operationId: getWishesProduct
+      security:
+        - ApiKeyAuth: []
+      summary: user wishes product
+      description: |
+        Returns products ids of user wishlist
+      responses:
+        '200':
+          description: |-
+            json:api success
+            Wishes products id
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/user_wishes'
+              meta:
+                type: object
+            title: WishesResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+      tags:
+        - /users/
+  /users/me/counters:
+    get:
+      x-controller: UserController
+      x-method: getCounters
+      operationId: getCounters
+      security:
+        - ApiKeyAuth: []
+      summary: 'Get notification, wishlist ... count for header display'
+      responses:
+        '200':
+          description: |-
+            json:api success
+            Current user's information to display
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/headerBadgeDetail'
+              meta:
+                type: object
+            title: CounterResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+      tags:
+        - /users/
+  /users/me/products/count:
+    get:
+      x-controller: UserController
+      x-method: getOwnCounters
+      operationId: getOwnCounters
+      security:
+        - ApiKeyAuth: []
+      summary: Get user's own counters
+      responses:
+        '200':
+          description: |-
+            json:api success
+            Current user's own counters to display
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/user_ownCounters'
+              meta:
+                type: object
+            title: OwnCounterResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+      tags:
+        - /users/
+  /users/me/products/on-sale:
+    get:
+      x-controller: ProductController
+      x-method: getOwnProducts
+      operationId: getOwnProductsOnSale
+      security:
+        - ApiKeyAuth: []
+      summary: Get users products on sale
+      description: |
+        returns users products on sale
+      responses:
+        '200':
+          description: |-
+            json:api success
+            List of own products
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/product'
+              meta:
+                type: object
+            title: ProductListResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+      tags:
+        - /users/
+  /users/me/products/price-drop:
+    get:
+      x-controller: ProductController
+      x-method: getOwnProducts
+      operationId: getOwnProductsPriceDrop
+      security:
+        - ApiKeyAuth: []
+      summary: Get users products on price drop
+      description: |
+        returns users products on price drop
+      responses:
+        '200':
+          description: |-
+            json:api success
+            List of own products
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/product'
+              meta:
+                type: object
+            title: ProductListResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+      tags:
+        - /users/
+  /users/me/products/expired:
+    get:
+      x-controller: ProductController
+      x-method: getOwnProducts
+      operationId: getOwnProductsExpired
+      security:
+        - ApiKeyAuth: []
+      summary: Get users products expired
+      description: |
+        returns users products expired
+      responses:
+        '200':
+          description: |-
+            json:api success
+            List of own products
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/product'
+              meta:
+                type: object
+            title: ProductListResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+      tags:
+        - /users/
+  /users/me/products/price-offer-received:
+    get:
+      x-controller: ProductController
+      x-method: getOwnProducts
+      operationId: getOwnProductsPriceOfferReceived
+      security:
+        - ApiKeyAuth: []
+      summary: Get users products with price offer received
+      description: |
+        returns users products which have been received offer price
+      responses:
+        '200':
+          description: |-
+            json:api success
+            List of own products
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/product'
+              meta:
+                type: object
+            title: ProductListResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+      tags:
+        - /users/
+  /users/me/products/sold:
+    get:
+      x-controller: ProductController
+      x-method: getOwnProducts
+      operationId: getOwnProductsSold
+      security:
+        - ApiKeyAuth: []
+      summary: Get users products solded
+      description: |
+        returns solded users products
+      responses:
+        '200':
+          description: |-
+            json:api success
+            List of own products
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/product'
+              meta:
+                type: object
+            title: ProductListResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+      tags:
+        - /users/
+  /users/me/products/curation-refused:
+    get:
+      x-controller: ProductController
+      x-method: getOwnProducts
+      operationId: getOwnProductsCurationRefused
+      security:
+        - ApiKeyAuth: []
+      summary: Get users products refused by vestiaire
+      description: |
+        returns users products refused by vestiaire
+      responses:
+        '200':
+          description: |-
+            json:api success
+            List of own products
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/product'
+              meta:
+                type: object
+            title: ProductListResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+      tags:
+        - /users/
+  /users/me/products/unreceived:
+    get:
+      x-controller: ProductController
+      x-method: getOwnProducts
+      operationId: getOwnProductsUnreceived
+      security:
+        - ApiKeyAuth: []
+      summary: Get users products unreceived by vestiaire
+      description: |
+        returns users products unreceived by vestiaire
+      responses:
+        '200':
+          description: |-
+            json:api success
+            List of own products
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/product'
+              meta:
+                type: object
+            title: ProductListResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+      tags:
+        - /users/
+  /users/me/products/sale-removed:
+    get:
+      x-controller: ProductController
+      x-method: getOwnProducts
+      operationId: getOwnProductsSaleRemoved
+      security:
+        - ApiKeyAuth: []
+      summary: Get users products removed
+      description: |
+        returns users products removed by himself
+      responses:
+        '200':
+          description: |-
+            json:api success
+            List of own products
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/product'
+              meta:
+                type: object
+            title: ProductListResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+      tags:
+        - /users/
+  /users/me/products/curation/picture:
+    get:
+      x-controller: ProductController
+      x-method: getOwnProducts
+      operationId: getOwnProductsCurationPicture
+      security:
+        - ApiKeyAuth: []
+      summary: Get users products waiting new photos
+      description: |
+        returns users products waiting for new photos
+      responses:
+        '200':
+          description: |-
+            json:api success
+            List of own products
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/product'
+              meta:
+                type: object
+            title: ProductListResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+      tags:
+        - /users/
+  /users/me/products/curation/information:
+    get:
+      x-controller: ProductController
+      x-method: getOwnProducts
+      operationId: getOwnProductsCurationInformation
+      security:
+        - ApiKeyAuth: []
+      summary: Get users products waiting more information
+      description: |
+        returns users products waiting for more informations
+      responses:
+        '200':
+          description: |-
+            json:api success
+            List of own products
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/product'
+              meta:
+                type: object
+            title: ProductListResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+      tags:
+        - /users/
+  /users/me/products/curation/negotiation:
+    get:
+      x-controller: ProductController
+      x-method: getOwnProducts
+      operationId: getOwnProductsCurationNegotiation
+      security:
+        - ApiKeyAuth: []
+      summary: Get users products with open mmao
+      description: |
+        priceDrop: return users products with open negotiation
+      responses:
+        '200':
+          description: |-
+            json:api success
+            List of own products
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/product'
+              meta:
+                type: object
+            title: ProductListResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+      tags:
+        - /users/
+  /users/me/products/curation/validation:
+    get:
+      x-controller: ProductController
+      x-method: getOwnProducts
+      operationId: getOwnProductsCurationValidation
+      security:
+        - ApiKeyAuth: []
+      summary: Get users products waiting validation from vestiaire
+      description: |
+        returns users products waiting validation from vestiaire
+      responses:
+        '200':
+          description: |-
+            json:api success
+            List of own products
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/product'
+              meta:
+                type: object
+            title: ProductListResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+      tags:
+        - /users/
+  /users/me/products/picture-cutoff:
+    get:
+      x-controller: ProductController
+      x-method: getOwnProducts
+      operationId: getOwnProductsPictureCutoff
+      security:
+        - ApiKeyAuth: []
+      summary: Get users products with picture in treatment
+      description: |
+        returns users with picture in treatment
+      responses:
+        '200':
+          description: |-
+            json:api success
+            List of own products
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/product'
+              meta:
+                type: object
+            title: ProductListResponse
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+      tags:
+        - /users/
+  /users/:
+    post:
+      x-controller: UserController
+      x-method: create
+      operationId: registerUser
+      summary: Register a new user
+      parameters:
+        - name: payload
+          in: body
+          description: Registration form data
+          schema:
+            $ref: '#/definitions/user_create'
+      responses:
+        '201':
+          description: |-
+            json:api success
+            Returns a new session when user was successfully registered
+          schema:
+            type: object
+            required:
+              - data
+              - meta
+            properties:
+              data:
+                $ref: '#/definitions/session'
+              meta:
+                type: object
+            title: SessionResponse
+        '400':
+          $ref: '#/responses/400'
+        '404':
+          $ref: '#/responses/404'
+        '409':
+          $ref: '#/responses/409'
+      tags:
+        - /users/
+definitions:
+  account_badge:
+    type: string
+    description: Describe user public status
+    enum:
+      - pro
+      - recommended
+      - premium
+      - depositor
+      - direct-shipping
+  account_civility:
+    type: object
+    required:
+      - name
+      - localizedName
+    properties:
+      name:
+        description: User civility name
+        type: string
+        example: mr
+        enum:
+          - mr
+          - mrs
+          - miss
+          - mme
+          - mlle
+          - sr.
+          - sra.
+          - srta.
+          - sig.
+          - sig.ra
+          - sig.na
+          - herr
+          - frau
+          - fräulein
+      localizedName:
+        description: User civility name (localized)
+        type: string
+        example: Mr
+  account_statistics:
+    type: object
+    required:
+      - productsSold
+      - productsBuyed
+      - productsListed
+      - productsWished
+    properties:
+      productsSold:
+        description: number of products that have been sold
+        type: integer
+        format: int32
+        example: '5'
+      productsBuyed:
+        description: number of products that have been buy
+        type: integer
+        format: int32
+        example: '7'
+      productsListed:
+        description: number of products that have been listed
+        type: integer
+        format: int32
+        example: '90'
+      productsWished:
+        description: number of products that have been added in wishlist
+        type: integer
+        format: int32
+        example: '132'
+      passRate:
+        description: >-
+          x% of this seller's items have passed quality control, transform_rate
+          in legacy
+        type: number
+        example: '96.5'
+  alert_category:
+    type: string
+    enum:
+      - newProduct
+      - priceDrop
+      - memberNewProduct
+      - memberPriceDrop
+      - memberWishlist
+      - memberLike
+    example: newProduct
+  alert_criterion:
+    type: object
+    required:
+      - key
+      - value
+    properties:
+      key:
+        description: Criterion identifier
+        $ref: '#/definitions/alert_criterionKey'
+      value:
+        description: Criterion value
+        type: array
+        items:
+          type: string
+          example: Omega Seamaster
+  alert_criterionKey:
+    type: string
+    example: searchQuery
+    enum:
+      - path
+      - searchQuery
+      - idUniverse
+      - idBrand
+      - idMaterials
+      - idPattern
+      - idColors
+      - idSeason
+      - idCondition
+      - idCategory
+      - idSubcategory
+      - idSize
+      - idProduct
+      - idModel
+      - idWatchMechanism
+      - discount
+      - tags
+      - priceMin
+      - priceMax
+      - stock
+  amountInWholeNumber:
+    description: 'Amount in whole number. In current currency, without cents (127 for 127€)'
+    type: integer
+    format: int32
+    minimum: 0
+    example: '127'
+  breadcrumb:
+    type: object
+    required:
+      - url
+      - localizedName
+    properties:
+      localizedName:
+        description: text to display (localized)
+        type: string
+        example: Accueil
+      url:
+        $ref: '#/definitions/url'
+  buyerFee:
+    type: object
+    required:
+      - rateType
+      - value
+      - cost
+    properties:
+      rateType:
+        $ref: '#/definitions/rateType'
+      value:
+        description: buyer fee rate/value
+        type: number
+        format: float
+        example: '0.20'
+      description:
+        type: string
+        description: Buyer fee description
+      cost:
+        $ref: '#/definitions/price'
+  carrier:
+    type: object
+    required:
+      - name
+      - availableCountry
+    properties:
+      name:
+        description: Name of the carrier
+        type: string
+        example: UPS
+      availableCountry:
+        description: Available country list
+        type: array
+        items:
+          $ref: '#/definitions/country'
+  catalog_facet:
+    type: object
+    required:
+      - facetId
+      - path
+    properties:
+      facetId:
+        description: Facet Id
+        type: string
+      path:
+        description: facet path
+        type: string
+  catalog_facetLink:
+    type: object
+    properties:
+      universes:
+        description: Universe facet link
+        type: array
+        items:
+          $ref: '#/definitions/catalog_facet'
+      categories:
+        description: Categories facet link
+        type: array
+        items:
+          $ref: '#/definitions/catalog_facet'
+      subCategories:
+        description: SubCategories facet link
+        type: array
+        items:
+          $ref: '#/definitions/catalog_facet'
+      subSubCategories:
+        description: SubSubCategories facet link
+        type: array
+        items:
+          $ref: '#/definitions/catalog_facet'
+      brand:
+        description: Brand facet link
+        type: array
+        items:
+          $ref: '#/definitions/catalog_facet'
+      model:
+        description: Model facet link
+        type: array
+        items:
+          $ref: '#/definitions/catalog_facet'
+      color:
+        description: Color facet link
+        type: array
+        items:
+          $ref: '#/definitions/catalog_facet'
+      material:
+        description: Material facet link
+        type: array
+        items:
+          $ref: '#/definitions/catalog_facet'
+      editorPicks:
+        description: Vintage facet link
+        type: array
+        items:
+          $ref: '#/definitions/catalog_facet'
+  commission:
+    type: object
+    required:
+      - pvnPrice
+      - price
+    properties:
+      pvnPrice:
+        description: seller's share
+        $ref: '#/definitions/price'
+      price:
+        description: price
+        $ref: '#/definitions/price'
+  contents_block:
+    type: object
+    properties:
+      text:
+        type: string
+        description: The text to be displayed in the link
+        example: Summer Deals
+      cta:
+        type: string
+        description: The second line of text to be displayed in the link
+        example: See the selection
+      color:
+        type: string
+        description: Hexadecimal color code for the link's background
+        example: '#FFFFFF'
+      url:
+        $ref: '#/definitions/url'
+      buttonPosition:
+        type: string
+        description: position of the button
+        enum:
+          - top-left
+          - bottom-left
+          - top-right
+          - bottom-right
+          - center
+        example: top-left
+      picture:
+        $ref: '#/definitions/picture'
+      mobilePicture:
+        $ref: '#/definitions/picture'
+  contents_blockContent:
+    type: object
+    properties:
+      _id:
+        type: string
+        description: blockId
+        example: 5cab3c854024d10012161c49
+      tags:
+        type: array
+        items:
+          type: string
+      createdAt:
+        type: string
+        format: date-time
+        example: '2019-04-08T12:00:19Z'
+      updatedAt:
+        type: string
+        format: date-time
+        example: '2019-04-08T12:00:19Z'
+      label:
+        type: string
+        example: ios_edito_20190909
+      blocks:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/contents_languageBlock'
+  contents_blockContentDetail:
+    type: object
+    properties:
+      target:
+        type: string
+        description: block target
+      title:
+        type: string
+        description: block title
+      supTitle:
+        type: string
+        description: block top title
+      subTitle:
+        type: string
+        description: block bottom title
+      backgroundColor:
+        type: string
+        description: color in hex
+      images:
+        type: array
+        items:
+          type: string
+          description: absolute url to image
+      cta:
+        type: string
+        description: absolute url for call to action
+      link:
+        type: string
+        description: absolute url for block link
+      textarea:
+        type: string
+        description: text field for blocks (in html)
+  contents_carouselItem:
+    type: object
+    properties:
+      text:
+        type: string
+        description: Text to display besides the picture.
+        example: Chanel bags
+      url:
+        $ref: '#/definitions/url'
+      picture:
+        $ref: '#/definitions/picture'
+  contents_catalogPageContent:
+    type: object
+    required:
+      - headline
+    properties:
+      headline:
+        type: string
+        description: Page headline
+        example: Women Bags
+      carousel:
+        type: array
+        description: Featured categories
+        items:
+          $ref: '#/definitions/contents_carouselItem'
+      intro:
+        type: string
+        description: Introduction text
+        example: No brand embodies French-style chic better than Chanel
+      body:
+        type: string
+        description: Body of the page
+        example: >-
+          ## Chanel, quintessential refinement.
+
+          No brand embodies French-style chic better than Chanel. A symbol of
+
+          [luxurious, refined
+          fashion](https://www.vestiairecollective.com/sale/chanel/),
+
+          the company, founded in 1910 is famed all around the world for its
+          haute couture
+
+          creations and lines of perfume, like the ultra-famous N°5.
+  contents_categories:
+    type: object
+    required:
+      - name
+      - blocks
+    properties:
+      name:
+        type: string
+        description: Name for backend purposes
+        example: 170803-US
+      blocks:
+        type: array
+        items:
+          $ref: '#/definitions/contents_categoriesBlock'
+  contents_categoriesBlock:
+    type: object
+    properties:
+      text:
+        type: string
+        description: The text displayed on the block
+        example: Gucci bags
+      url:
+        $ref: '#/definitions/url'
+      picture:
+        $ref: '#/definitions/picture'
+  contents_customerCare:
+    type: object
+    required:
+      - phone
+      - schedule
+    properties:
+      phone:
+        type: string
+        description: Phone number
+        example: 09 70 25 37 37
+      schedule:
+        description: Opening times
+        type: string
+        example: 'Lundi-vendredi: 8h-18h'
+      phonePremium:
+        type: string
+        description: Phone number premium
+        example: 01 76 49 27 12
+      schedulePremium:
+        type: string
+        description: Phone number premium
+        example: du lundi au vendredi de 8h00 à 21h00<br />le samedi de 10h00 à 18h00
+  contents_deeplink:
+    type: object
+    properties:
+      deeplink:
+        type: string
+        description: deeplink related to requested url
+      errorMessage:
+        type: string
+        description: error message returned by translateMobileLinkV2
+  contents_editorialContent:
+    type: object
+    properties:
+      title:
+        type: string
+        description: Editorial post title
+        example: Summer goods
+      subTitle:
+        type: string
+        description: Editorial post sub title
+        example: All your summer goods from ...
+      picture:
+        $ref: '#/definitions/picture'
+      url:
+        $ref: '#/definitions/url'
+  contents_editorialCrush:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Name for backend purposes
+        example: Crush of the week
+      title:
+        type: string
+        description: Title to be displayed on top of the image
+        example: >-
+          Caroline's Yves Saint Laurent clutch travelled aroud the world with
+          her.
+      url:
+        $ref: '#/definitions/url'
+      picture:
+        $ref: '#/definitions/picture'
+      user:
+        $ref: '#/definitions/user'
+  contents_editorialList:
+    type: object
+    properties:
+      editoList:
+        type: array
+        items:
+          $ref: '#/definitions/contents_editorialContent'
+  contents_languageBlock:
+    type: object
+    properties:
+      language:
+        type: string
+        example: fr_fr
+      body:
+        type: object
+        $ref: '#/definitions/contents_blockContentDetail'
+  contents_localizedPath:
+    type: object
+    required:
+      - language
+      - path
+    properties:
+      language:
+        type: string
+        description: Language
+        example: fr
+      path:
+        description: Path on given language
+        type: string
+        example: /sacs-femmes/
+  contents_mainMerchandizing:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Name for backend purposes
+        example: Main block number one
+      baseline:
+        type: object
+        properties:
+          text:
+            type: string
+            description: Text to be displayed in the middle of the desktop element.
+            example: Buy. Sell. Share.
+          color:
+            type: string
+            description: Hexadecimal color code for the text
+            example: '#FFFFFF'
+      specialEvent:
+        $ref: '#/definitions/contents_block'
+      blocks:
+        type: array
+        items:
+          $ref: '#/definitions/contents_block'
+  contents_pageIndexation:
+    type: object
+    required:
+      - index
+      - follow
+      - crawlPagination
+    properties:
+      index:
+        type: boolean
+        description: Allow search engines to add the page to their index.
+        example: 'true'
+      follow:
+        type: boolean
+        description: Tells the search engines that it may follow links on the page.
+        example: 'true'
+      crawlPagination:
+        type: boolean
+        description: Tells us if we can let Search Engine to do pagination crawling
+        example: 'true'
+  contents_pageMetadata:
+    type: object
+    required:
+      - title
+    properties:
+      title:
+        type: string
+        description: Page title
+        example: 'Leather bags for women, second-hand luxury bags'
+      description:
+        type: string
+        description: Meta description
+        example: >-
+          Discover an amazing selection of second-hand designer leather bags for
+          women...
+      keywords:
+        type: string
+        description: Meta keywords
+        example: 'Leather, bags, women'
+  contents_pageTypeContent:
+    type: object
+    x-bundler-relationships:
+      id:
+        description: Unique identifier for page in cms
+        type: string
+        example: 5ca49154d4a1310011ba877e
+      type:
+        description: Page type
+        type: string
+        example: home
+      label:
+        description: Page label
+        type: string
+        example: iOs 201909 homepage
+      active:
+        description: 'page activation status, should always be at true'
+        type: boolean
+        example: 'true'
+      global:
+        description: indicated is the page is a default fallback page
+        type: boolean
+        example: 'true'
+      blockList:
+        type: array
+        items:
+          $ref: '#/definitions/contents_blockContent'
+  contents_promotionalBanner:
+    type: object
+    required:
+      - content
+      - contentLegals
+      - link
+    properties:
+      content:
+        type: string
+        description: Text to be displayed in the banner
+        example: FREE SHIPPING ON ORDERS OVER 300€! Use code** JANFIN
+      contentShort:
+        type: string
+        description: Short text to be displayed in the banner (mobile)
+        example: FREE SHIPPING OVER 300€! code** JANFIN
+      contentLegals:
+        type: string
+        description: Text to be displayed in the footer
+        example: >-
+          **Free shipping on orders over 300€ with code JANFIN. Valid from
+          03/01/17 to midnight the 05/01/17. [...]
+      link:
+        type: string
+        description: Link / Deeplink (for mobile applications) to the landing page
+        example: 'http://www.vestiairecollective.com/we-love/'
+      backgroundColor:
+        type: string
+        description: Hexadecimal color code for background
+        example: '\#197a08'
+      textColor:
+        type: string
+        description: Hexadecimal color code for text
+        example: '\#fdfcfe'
+  contents_reinsuranceItem:
+    type: object
+    properties:
+      title:
+        type: string
+        description: reinsurance bloc title
+        example: Exceptional products
+      description:
+        type: string
+        description: Description of what's about reinsurance
+        example: 'To avoid waiting for each item in your order, once...'
+      subDescription:
+        type: string
+        description: Sub description about reinsurance
+        example: >-
+          Our authentification fees is 2 % of the item price and will be no more
+          than $9.99
+  contents_route:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Route name
+        example: brand
+      parameters:
+        type: array
+        items:
+          $ref: '#/definitions/contents_routeParameter'
+  contents_routeParameter:
+    type: object
+    required:
+      - name
+      - value
+    properties:
+      name:
+        type: string
+        description: Parameter name
+        example: idBrand
+        enum:
+          - idUniverse
+          - idBrand
+          - idColors
+          - idMaterials
+          - idCategory
+          - idSubcategory
+          - idSubSubcategory
+          - idProduct
+          - idModel
+          - tag
+          - stock
+      value:
+        description: Parameter value
+        type: string
+        example: '2'
+  contents_singleEdito:
+    type: object
+    properties:
+      name:
+        type: string
+        description: BO name
+        example: Story
+      title:
+        type: string
+        description: Title to be displayed into the content
+        example: Work / Life
+      text:
+        type: string
+        description: Text to be displayed into the content
+        example: >-
+          Stylist Karen Langley shows us the chicest ways to resolve third world
+          hunger.
+      italicText:
+        type: string
+        description: Text to be displayed in italic into the content
+        example: Karen Langley
+      url:
+        $ref: '#/definitions/url'
+      backgroundColor:
+        type: string
+        description: Hexadecimal color for the background
+        example: '#000000'
+      textColor:
+        type: string
+        description: Hexadecimal color for the text
+        example: '#FFFFFF'
+      pictures:
+        type: array
+        items:
+          $ref: '#/definitions/picture'
+  contents_type-size:
+    type: array
+    required:
+      - idSize
+      - label
+    properties:
+      idSize:
+        type: string
+        description: id type size
+        example: '6'
+      label:
+        description: type size value
+        type: string
+        example: XL
+    items:
+      type: string
+  credentials:
+    type: object
+    description: >-
+      This definition represents a credential that can be used to sign-up and
+      log-in.
+
+      Swagger 2.0 doesn't allow to use oneOf definitions to represent properly
+
+      this definition.
+
+      The required properties are ((email and password) or (socialId and
+      socialAccountType and socialToken))
+    properties:
+      email:
+        description: user's email
+        type: string
+        format: email
+      password:
+        description: user's password
+        type: string
+        format: password
+      socialId:
+        description: Social user ID
+        type: string
+      socialAccountType:
+        description: Social user account type
+        type: string
+        enum:
+          - facebook
+      socialToken:
+        description: Social user token
+        type: string
+  currency:
+    type: string
+    enum:
+      - EUR
+      - USD
+      - GBP
+      - SGD
+      - SEK
+      - HKD
+      - CAD
+      - AUD
+      - CHF
+      - PLN
+      - DKK
+    example: EUR
+  duty:
+    type: object
+    properties:
+      rate:
+        description: Duty rate
+        type: number
+        format: float
+        example: '0.20'
+      amountExcludingTaxes:
+        $ref: '#/definitions/price'
+      amountVAT:
+        $ref: '#/definitions/price'
+      amountIncludingTaxes:
+        $ref: '#/definitions/price'
+  errorDetail:
+    type: object
+    required:
+      - code
+      - detail
+    properties:
+      code:
+        type: integer
+        description: The error code associated with this error
+        example: '404'
+      detail:
+        type: string
+        description: A message describing the error
+        example: >-
+          Houston we have a problem! We can't seem to find what you're looking
+          for
+  errorResponse:
+    type: object
+    required:
+      - errors
+      - meta
+    properties:
+      errors:
+        $ref: '#/definitions/errorDetail'
+      meta:
+        type: object
+        description: An object containing meta-information about the error
+  headerBadgeDetail:
+    type: object
+    required:
+      - orderLineCount
+      - notificationCount
+      - wishListCount
+    properties:
+      orderLineCount:
+        description: Count orderline to display on header
+        type: integer
+        format: int32
+        example: '0'
+      notificationCount:
+        description: Count active notification to display on header
+        type: integer
+        format: int32
+        example: '4'
+      wishListCount:
+        description: Count wishList product to display on header
+        type: integer
+        format: int32
+        example: '3'
+  i18n:
+    type: object
+    required:
+      - country
+      - language
+      - currency
+    properties:
+      country:
+        description: I18n's country
+        type: string
+        example: FR
+      language:
+        description: I18n's language
+        type: string
+        example: fr
+      currency:
+        description: I18n's currency
+        type: string
+        example: EUR
+      siteId:
+        description: I18n's siteId
+        type: string
+        example: '1'
+  language:
+    type: object
+    required:
+      - name
+      - localizedName
+      - code
+    properties:
+      name:
+        description: Original language name
+        type: string
+        example: English
+      localizedName:
+        description: Language name (localized)
+        type: string
+        example: Anglais
+      code:
+        description: Language code ISO 639-1
+        type: string
+        example: en
+  meshLink:
+    type: object
+    required:
+      - localizedName
+      - url
+    properties:
+      name:
+        description: mesh name
+        type: string
+        example: Sac à main
+      localizedName:
+        description: mesh name (localized)
+        type: string
+        example: HandBag
+      url:
+        $ref: '#/definitions/url'
+  metas_count:
+    type: integer
+    description: total number of items in the list
+    format: int32
+    example: '17778986'
+  metas_displayCount:
+    type: integer
+    description: displayCount to display (notifications)
+    format: int32
+    example: '5'
+  metas_limit:
+    type: integer
+    description: limit (number of hits per page)
+    format: int32
+    example: '60'
+  metas_offset:
+    type: integer
+    description: offset of the first hit to return
+    format: int32
+    example: '0'
+  newsletter-registration:
+    type: object
+    description: A newsletter registration request
+    required:
+      - email
+    properties:
+      email:
+        type: string
+        format: email
+      opted:
+        description: Has accepted to receive promotional emails
+        type: boolean
+        default: true
+  notification_channel:
+    type: string
+    enum:
+      - push
+      - email
+    example: email
+    description: Notification channel for sending alerts
+  notification_frequency:
+    type: string
+    enum:
+      - daily
+      - realtime
+    example: daily
+  order_planUpdate:
+    type: object
+    required:
+      - success
+      - info
+    properties:
+      success:
+        description: Success response status
+        type: boolean
+        example: 'true'
+      info:
+        type: string
+        description: Detail of the update result
+        example: ligne commande 123456789 updated. Type direct-shipping
+  paginationMetadata:
+    type: object
+    properties:
+      count:
+        type: integer
+        description: total number of items in the list
+        format: int32
+        example: '17778986'
+      limit:
+        type: integer
+        description: limit (number of hits per page)
+        format: int32
+        example: '60'
+      offset:
+        type: integer
+        description: offset of the first hit to return
+        format: int32
+        example: '0'
+      displayCount:
+        type: integer
+        description: displayCount to display (notifications)
+        format: int32
+        example: '5'
+  paymentMethod:
+    type: object
+    required:
+      - name
+      - mnemonic
+    properties:
+      name:
+        description: name of the payment method
+        type: string
+        example: Splitit
+      mnemonic:
+        description: mnemonic of the payment method
+        type: string
+        example: Splitit
+      icon:
+        $ref: '#/definitions/picture'
+      disclaimer:
+        description: payment method information
+        type: string
+        example: >-
+          Something boring about needed information and lots of other things (or
+          maybe a link)
+  picture:
+    type: object
+    required:
+      - path
+    properties:
+      path:
+        description: Picture path
+        type: string
+        example: /produit/2586406-1_1.jpg
+      url:
+        $ref: '#/definitions/url'
+      width:
+        description: Image width
+        type: integer
+        format: int32
+        minimum: 1
+        example: '1920'
+      height:
+        description: Image height
+        type: integer
+        format: int32
+        minimum: 1
+        example: '1080'
+      centery:
+        description: Image center y
+        type: number
+        format: float
+        example: '0.5'
+      name:
+        description: Picture name
+        type: string
+        example: 2586406-1_1.jpg
+      alt:
+        description: Alternative name if not exist (seo needed)
+        type: string
+        example: Pochette STELLA MC CARTNEY
+  plan_option:
+    type: object
+    required:
+      - code
+      - name
+      - services
+    properties:
+      code:
+        description: Plan code (identifier)
+        type: string
+        example: direct-shipping
+      name:
+        description: Plan name
+        type: string
+        example: Direct shipping
+      selected:
+        description: Selected plan
+        type: boolean
+        example: 'true'
+      services:
+        description: Plan's services
+        type: array
+        items:
+          $ref: '#/definitions/plan_service'
+  plan_service:
+    type: object
+    required:
+      - code
+    properties:
+      code:
+        description: Service code (identifier)
+        type: string
+        example: authentication
+      name:
+        description: Service name
+        type: string
+        example: authentication
+      available:
+        description: Is service availlable in plan
+        type: boolean
+        example: 'false'
+      cost:
+        $ref: '#/definitions/price'
+  plan:
+    type: object
+  price:
+    type: object
+    required:
+      - currency
+      - cents
+      - formatted
+    properties:
+      currency:
+        $ref: '#/definitions/currency'
+      cents:
+        description: amount in cents
+        type: integer
+        format: int32
+        minimum: 0
+        example: '158009'
+      formatted:
+        description: formatted amount with currency
+        type: string
+        example: 1500.09 €
+  product_conditionLevel:
+    type: object
+    properties:
+      name:
+        type: string
+        example: Good condition
+        description: Name of condition level
+      good:
+        type: string
+        example: >-
+          A second-hand item of clothing in very good condition is one that has
+          been rarely worn and has been very well looked after.
+        description: >-
+          Explanatory text to determinate and know reasons why a product is
+          considered to be in a good condition
+      bad:
+        type: string
+        example: >-
+          Alteration to be specified in the description, changed button(s) to be
+          specified in the description.
+        description: >-
+          Explanatory text to determinate and know reasons why a product is
+          considered to be in a bad condition
+  product_installment:
+    type: object
+    description: 'intallment details, not always returned'
+    properties:
+      icon:
+        description: icon path
+        type: string
+        example: /payment/paiement_ico_splitit.png
+      name:
+        description: splitIt
+        type: string
+        example: SplitIt
+      mnemonic:
+        description: mnemonic to find the good svg
+        type: string
+        example: splitit
+      iconPlaceholder:
+        description: icon Place holder
+        type: string
+        example: string
+      disclaimer:
+        description: disclaimer details
+        type: string
+        example: string
+      description:
+        description: description details
+        type: string
+        example: Pay by installments with your Mastercard or Visa with
+      link:
+        description: link to splitIt
+        type: string
+        example: 'https://www.vestiairecollective.com/financing-splitit.shtml'
+  product_measurement:
+    type: object
+    required:
+      - localizedName
+      - value
+    properties:
+      name:
+        description: Measurement name
+        type: string
+        example: Width
+      localizedName:
+        description: Measurement name (localized)
+        type: string
+        example: Largeur
+      value:
+        description: Value of measurement
+        type: string
+        example: '30'
+  product_meshLinks:
+    type: object
+    properties:
+      topCategory:
+        description: top category seo informations
+        type: object
+        items:
+          $ref: '#/definitions/meshLink'
+      category:
+        description: category seo informations
+        type: object
+        items:
+          $ref: '#/definitions/meshLink'
+      categoryBrand:
+        description: category / brand seo informations
+        type: object
+        items:
+          $ref: '#/definitions/meshLink'
+      categoryBrandModel:
+        description: category / brand / model seo information
+        type: object
+        items:
+          $ref: '#/definitions/meshLink'
+      categoryBrandModelMaterial:
+        description: category / brand / model / material seo information
+        type: object
+        items:
+          $ref: '#/definitions/meshLink'
+      categoryBrandModelMaterialColor:
+        description: category / brand / model / material / color seo information
+        type: object
+        items:
+          $ref: '#/definitions/meshLink'
+  product_packaging:
+    type: object
+    required:
+      - localizedName
+      - value
+    properties:
+      name:
+        description: Packaging name
+        type: string
+        example: Shoe box
+      localizedName:
+        description: Packaging name (localized)
+        type: string
+        example: Boite à chaussures
+      value:
+        description: Product has this packaging or not
+        type: boolean
+        example: 'true'
+  product_reservation:
+    type: object
+    required:
+      - active
+      - premium
+      - reservedToMe
+    properties:
+      active:
+        type: boolean
+        description: Indicates whether reservation is active
+      expirationDate:
+        type: string
+        format: date-time
+        description: Date when reservation expires
+      premium:
+        type: boolean
+        description: Product is reserved by a premium member
+      reservedToMe:
+        type: boolean
+        description: |
+          Reservation was requested by myself (the currently signed-in user)
+          and the product is therefore reserved to me
+  product_tag:
+    type: string
+    enum:
+      - welove
+      - vintage
+      - pro
+  productReport:
+    type: object
+    description: >-
+      A few users have the ability to report to VC products that seems
+      sucpicious to them.
+
+      This definition represents a report
+    required:
+      - message
+    properties:
+      message:
+        description: Report message
+        type: string
+        example: That product is a fake
+  rateType:
+    type: string
+    enum:
+      - FLAT
+      - PERCENTAGE
+  reinsurance:
+    type: object
+    properties:
+      title:
+        description: reinsurance title
+        type: string
+        example: How are our shipping costs calculated?
+      content:
+        type: array
+        items:
+          $ref: '#/definitions/contents_reinsuranceItem'
+  resetPasswordRequest:
+    type: object
+    required:
+      - email
+    properties:
+      email:
+        description: Email Address
+        type: string
+        format: email
+        example: fashionAddict75001@laposte.net
+  responses_emptyResponse:
+    type: string
+  shipping_cost:
+    type: object
+    properties:
+      highValue:
+        $ref: '#/definitions/price'
+      lowValue:
+        $ref: '#/definitions/price'
+      highAmount:
+        $ref: '#/definitions/price'
+      lowAmount:
+        $ref: '#/definitions/price'
+  shipping_fees:
+    type: object
+    required:
+      - cost
+    properties:
+      cost:
+        $ref: '#/definitions/price'
+  shipping_method:
+    type: object
+    required:
+      - name
+      - minAmount
+      - maxAmount
+      - availableCountry
+    properties:
+      name:
+        description: Name of the carrier
+        type: string
+        example: Common shipper
+      availableCountry:
+        description: List of available country
+        type: array
+        items:
+          $ref: '#/definitions/country'
+      minAmount:
+        $ref: '#/definitions/price'
+      maxAmount:
+        $ref: '#/definitions/price'
+      carrier:
+        $ref: '#/definitions/carrier'
+  shipping:
+    type: object
+    properties:
+      warehouse:
+        $ref: '#/definitions/warehouse'
+      destinationCountry:
+        $ref: '#/definitions/country'
+      cost:
+        $ref: '#/definitions/shipping_cost'
+      sendDelay:
+        type: integer
+        description: Product will be shipped within X business days
+        example: '1'
+      sendDay:
+        type: string
+        description: 'Product will be shipped on {sendDay}'
+        example: Monday
+      prohibited:
+        type: boolean
+        description: The product is prohibited in user's country
+        example: 'false'
+      buyable:
+        type: boolean
+        description: Product can be shipped to user's country
+  unit:
+    type: string
+    enum:
+      - cm
+      - in
+  url:
+    type: object
+    required:
+      - path
+      - url
+    properties:
+      original:
+        description: Original url
+        type: string
+        example: >-
+          https://fr.vestiairecollective.com/ultimate-beautiful-boot?page=116&param=2
+      path:
+        description: Url path
+        type: string
+        example: /ultimate-beautiful-boot/
+      url:
+        description: 'full url, with localized hostname'
+        type: string
+        example: 'https://www.vestiairecollective.com/ultimate-beautiful-boot/'
+      mobile:
+        description: Mobile dedicated url
+        type: string
+        example: >-
+          com.vestiairecollective.vestiaire://action?type=url&url=https://fr.vestiairecollective.com/ultimate-beautiful-boot
+  user_app:
+    type: object
+    required:
+      - key
+      - value
+    properties:
+      key:
+        description: Application name
+        type: string
+        enum:
+          - android
+          - ios
+      value:
+        description: Application ID value
+        type: string
+        example: 3e4de4a1ef1e19f0d53b6f25864bec1a1e3b23b0
+  user_badge:
+    type: string
+    description: Describe user public status
+    enum:
+      - pro
+      - recommended
+      - premium
+      - depositor
+      - productReporter
+      - direct-shipping
+  user_civility:
+    type: object
+    required:
+      - name
+      - localizedName
+      - idGender
+    properties:
+      name:
+        description: User civility name
+        type: string
+        example: mr
+        enum:
+          - mr
+          - mrs
+          - miss
+      localizedName:
+        description: User civility name (localized)
+        type: string
+        example: sr.
+        enum:
+          - mr
+          - mrs
+          - miss
+          - mme
+          - mlle
+          - sr.
+          - sra.
+          - srta.
+          - sig.
+          - sig.ra
+          - sig.na
+          - herr
+          - frau
+          - fräulein
+      idGender:
+        description: 'User gender ID (1 - Mr, 2 - Mrs, 3 - Miss)'
+        type: integer
+        example: '1'
+  user_create:
+    type: object
+    required:
+      - firstname
+      - civility
+      - country
+      - credentials
+    properties:
+      firstname:
+        type: string
+      civility:
+        description: Civility ID
+        type: integer
+        format: int32
+      country:
+        type: string
+        description: Country ID
+        format: iso-3166-1-alpha-2
+      picture:
+        type: string
+        format: byte
+      credentials:
+        $ref: '#/definitions/credentials'
+  user_follows:
+    type: array
+    description: followed user ids
+    example:
+      - '4507815'
+      - '210619'
+    items:
+      type: string
+  user_goalThreshold:
+    description: The tags threshold for seller rating
+    type: object
+    required:
+      - category
+      - max_value
+      - thresholds
+    properties:
+      category:
+        description: The type of goal threshold
+        example: conformity
+        type: string
+        enum:
+          - conformity
+          - shipping
+          - volume
+      max_value:
+        description: The max value (a rate or an integer)
+        example: '5'
+        type: number
+      thresholds:
+        type: array
+        items:
+          $ref: '#/definitions/user_threshold'
+  user_likes:
+    type: object
+    description: 'id items for products, brands and comments'
+    properties:
+      products:
+        description: liked products id
+        type: array
+        example:
+          - '324324'
+          - '2342345'
+        items:
+          type: string
+      brands:
+        description: liked brands id
+        type: array
+        example:
+          - '453423'
+          - '454900'
+        items:
+          type: string
+      comments:
+        description: liked comments id
+        type: array
+        example:
+          - '546445'
+          - '2345445'
+        items:
+          type: string
+  user_ownCounters:
+    type: object
+    required:
+      - productOnSale
+      - productWaitingPicture
+      - productWaitingValidation
+      - productSold
+      - productRefused
+      - productUnreceived
+    properties:
+      productOnSale:
+        description: User's number of product on sale
+        type: integer
+        format: int32
+        example: '9'
+      productWaitingPicture:
+        description: User's number of product in progress (waiting photo)
+        type: integer
+        format: int32
+        example: '11'
+      productWaitingValidation:
+        description: Users's number of product in progress (waiting validation)
+        type: integer
+        format: int32
+        example: '2'
+      productSold:
+        description: User's number of product sold
+        type: integer
+        format: int32
+        example: '7'
+      productRefused:
+        description: User's number of product refused
+        type: integer
+        format: int32
+        example: '0'
+      productUnreceived:
+        description: User's number of product unreceived
+        type: integer
+        format: int32
+        example: '1'
+  user_pricedrop:
+    type: array
+    description: followed price drop products id
+    example:
+      - '453423'
+      - '454900'
+    items:
+      type: string
+  user_sellerRating:
+    description: The seller rating
+    type: object
+    required:
+      - badge
+    properties:
+      badge:
+        description: The seller badge
+        type: string
+      goals:
+        description: The seller rating details
+        type: object
+        required:
+          - conformity
+          - cx
+          - shipping
+          - volume
+        properties:
+          conformity:
+            description: The sold product acceptance rate (quality and authentication)
+            type: number
+            format: float
+            minimum: 0
+            maximum: 1
+            example: '0.7'
+          cx:
+            description: The customer experience (comment answering time)
+            type: number
+            format: float
+            minimum: 0
+            maximum: 1
+            example: '0.7'
+          shipping:
+            description: Cancellation rate
+            type: number
+            format: float
+            minimum: 0
+            maximum: 1
+            example: '0.7'
+          volume:
+            description: The number of products sold in the last three months
+            type: integer
+            minimum: 0
+            example: '42'
+          tags:
+            description: The names of the tags used for seller rating
+            type: object
+            example:
+              conformity: 0
+              shipping: 1
+              volume: 1
+            properties:
+              conformity:
+                description: >-
+                  if the seller has the tag for her/his sold product acceptance
+                  rate (quality and authentication)
+                type: boolean
+              shipping:
+                description: if the seller has the tag for her/his cancellation rate
+                type: boolean
+              volume:
+                description: >-
+                  if the seller has the tag for her/his number of products sold
+                  in the last three months
+                type: boolean
+      goalsThresholds:
+        type: array
+        items:
+          $ref: '#/definitions/user_goalThreshold'
+  user_social:
+    type: object
+    required:
+      - nbFollows
+      - nbFollowers
+      - productsLiked
+      - communityRank
+    properties:
+      nbFollows:
+        description: number of people followed by the user
+        type: integer
+        format: int32
+        example: '10'
+      nbFollowers:
+        description: number of people following the user
+        type: integer
+        format: int32
+        example: '190'
+      productsLiked:
+        description: number of products that have been liked
+        type: integer
+        format: int32
+        example: '2189'
+      communityRank:
+        description: Community rank based on social interaction on the website
+        type: integer
+        format: int32
+        example: '12'
+      followed:
+        description: Status of a user to know if the user is followed or not
+        type: boolean
+        example: 'false'
+  user_statistics:
+    type: object
+    required:
+      - productsSold
+      - productsBought
+      - productsListed
+      - productsWished
+    properties:
+      productsSold:
+        description: number of products that have been sold
+        type: integer
+        format: int32
+        example: '5'
+      productsBought:
+        description: number of products that have been buy
+        type: integer
+        format: int32
+        example: '7'
+      productsListed:
+        description: number of products that have been listed
+        type: integer
+        format: int32
+        example: '90'
+      productsWished:
+        description: number of products that have been added in wishlist
+        type: integer
+        format: int32
+        example: '132'
+      passRate:
+        description: >-
+          x% of this seller's items have passed quality control, transform_rate
+          in legacy
+        type: number
+        example: '96.5'
+  user_threshold:
+    description: The tag threshold for seller rating goals
+    type: object
+    required:
+      - label
+      - value
+    properties:
+      label:
+        description: The name of tag threshold
+        example: low
+        type: string
+      value:
+        description: The value of tag threshold (a rate or an integer)
+        example: '0.8'
+        type: number
+  user_wishes:
+    type: array
+    description: user wishes product
+    example:
+      - '453423'
+      - '454900'
+    items:
+      type: string
+  wallet:
+    type: object
+    required:
+      - balance
+    properties:
+      balance:
+        description: Available balance
+        $ref: '#/definitions/price'
+  warehouse:
+    type: object
+    required:
+      - name
+      - localizedName
+    properties:
+      name:
+        type: string
+        example: Paris
+        description: Warehouse name
+      localizedName:
+        type: string
+        example: Parigi
+        description: Localized warehouse name
+  welcomeVoucher:
+    type: object
+    required:
+      - voucherCode
+      - threshold
+      - discount
+      - text
+    properties:
+      voucherCode:
+        type: string
+        description: Voucher code
+        example: WELCOME17
+      threshold:
+        $ref: '#/definitions/price'
+        description: Min price for beeing eligible to discount
+      discount:
+        $ref: '#/definitions/price'
+        description: Discount price
+      text:
+        type: string
+        description: Voucher text
+        example: >-
+          €22.83 DISCOUNT on your first purchase over €228.3, with the code*:
+          WELCOME17
+  account:
+    type: object
+    required:
+      - id
+      - type
+      - firstname
+      - civility
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+        enum:
+          - account
+      firstname:
+        description: user firstname
+        type: string
+        example: Marie
+      username:
+        description: User name
+        type: string
+        format: username
+        example: fashionAddict75001
+      email:
+        description: user email
+        type: string
+        format: email
+        example: fashionAddict75001@laposte.net
+      civility:
+        $ref: '#/definitions/account_civility'
+      statistics:
+        $ref: '#/definitions/account_statistics'
+      badges:
+        type: array
+        items:
+          $ref: '#/definitions/account_badge'
+  address:
+    type: object
+    required:
+      - id
+      - type
+      - address1
+      - zipCode
+      - city
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+        enum:
+          - address
+      address1:
+        description: First and main part of the adress
+        type: string
+        example: 33 boulevard du general martial valin
+      address2:
+        description: Additionnal information about the adress
+        type: string
+        example: 4th floor
+      zipCode:
+        description: Zip code
+        type: string
+        example: '75015'
+      states:
+        type: string
+        example: Washington
+      city:
+        type: string
+        example: Paris
+      country:
+        description: '[Relationship] Address country'
+        $ref: '#/definitions/country'
+  alert:
+    type: object
+    required:
+      - id
+      - type
+      - category
+      - channels
+      - frequency
+      - criteria
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+        enum:
+          - alert
+      category:
+        $ref: '#/definitions/alert_category'
+        description: Alert category
+      name:
+        type: string
+        example: "Ready\_To\_Ship"
+        description: A human-readable name
+      localizedName:
+        type: string
+        example: EN STOCK
+        description: A human-readable name (localized)
+      creationDate:
+        type: string
+        format: date-time
+        description: Date when alert was created
+        example: '1985-01-24T08:17:00Z'
+      channels:
+        description: Notification channels
+        type: array
+        items:
+          $ref: '#/definitions/notification_channel'
+      frequency:
+        description: Notification frequency
+        $ref: '#/definitions/notification_frequency'
+      criteria:
+        description: List of criteria triggering the alert
+        type: array
+        items:
+          $ref: '#/definitions/alert_criterion'
+  brand:
+    type: object
+    required:
+      - id
+      - type
+      - name
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+        enum:
+          - brand
+      name:
+        description: original brand name
+        type: string
+        example: Channel
+      localizedName:
+        description: Brand name (localized)
+        type: string
+        example: Chanel
+      logo:
+        $ref: '#/definitions/picture'
+      url:
+        $ref: '#/definitions/url'
+      active:
+        type: boolean
+        example: 'false'
+        description: Indicate if the brand is active or banned / deleted for deposit form
+      likeCount:
+        type: integer
+        description: Number of likes
+        example: '1258'
+  campaign:
+    type: object
+    required:
+      - id
+      - type
+      - title
+      - description
+      - banner
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+        enum:
+          - campaign
+      title:
+        description: campaign title
+        type: string
+        example: This season’s sunglasses
+      localizedTitle:
+        description: localized campaign title
+        type: string
+        example: Die Sonnenbrillen der Saison
+      description:
+        description: campaign description
+        type: string
+        example: 'Oversized, minimalist, classic and vintage styles'
+      localizedDescription:
+        description: localized campaign description
+        type: string
+        example: 'Oversized, minimalistisch, klassisch oder Vintage'
+      banner:
+        description: the banner to show on the page
+        type: string
+        example: 1759lunettesoleil765x250px.jpg
+  catalog-page:
+    type: object
+    required:
+      - id
+      - type
+      - path
+      - language
+      - template
+      - metadata
+      - indexation
+      - isOpenedForPagination
+      - route
+      - content
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+        enum:
+          - catalog-page
+      path:
+        type: string
+        description: Path
+        example: /women-bags/
+      language:
+        type: string
+        description: Language code
+        example: us
+      template:
+        type: string
+        description: Page template
+        example: brand-page
+      alternateVersions:
+        description: Regional variations of the page.
+        type: array
+        items:
+          $ref: '#/definitions/contents_localizedPath'
+      metadata:
+        $ref: '#/definitions/contents_pageMetadata'
+      indexation:
+        $ref: '#/definitions/contents_pageIndexation'
+      route:
+        description: Route details
+        $ref: '#/definitions/contents_route'
+      content:
+        $ref: '#/definitions/contents_catalogPageContent'
+      isOpenedForPagination:
+        type: boolean
+        description: true if pagination is opened
+        example: 'true'
+  category:
+    type: object
+    required:
+      - id
+      - type
+      - name
+      - localizedName
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+        enum:
+          - category
+      name:
+        description: Category name
+        type: string
+        example: Bag
+      localizedName:
+        description: Category name (localized)
+        type: string
+        example: Sac
+      parent:
+        $ref: '#/definitions/category'
+  color:
+    type: object
+    required:
+      - id
+      - type
+      - name
+      - localizedName
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+        enum:
+          - color
+      name:
+        description: color name
+        type: string
+        example: blue
+      localizedName:
+        description: color name (localized)
+        type: string
+        example: bleu
+  comment:
+    type: object
+    required:
+      - id
+      - type
+      - message
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+        enum:
+          - comment
+      isNegotiationSellerOffer:
+        type: boolean
+        example: 'true'
+      isTranslatable:
+        type: boolean
+        example: 'true'
+      nbLike:
+        type: integer
+        example: '7'
+      date:
+        type: string
+        format: date-time
+        example: '1985-01-24T08:17:00Z'
+      message:
+        type: string
+        example: My comment message
+      product:
+        description: '[Relationship]'
+        $ref: '#/definitions/product'
+      author:
+        description: '[Relationship]'
+        $ref: '#/definitions/user'
+  condition:
+    type: object
+    required:
+      - id
+      - type
+      - description
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+        enum:
+          - condition
+      description:
+        description: Condition description (localized)
+        type: string
+        example: Very good
+  country:
+    type: object
+    required:
+      - id
+      - type
+      - name
+      - localizedName
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+        enum:
+          - country
+      name:
+        description: Country name
+        type: string
+        example: United States
+      localizedName:
+        description: Country name (localized)
+        type: string
+        example: États-Unis
+      isoCode:
+        description: Country Iso code
+        type: string
+        example: FR
+  deliveryTime:
+    type: object
+    required:
+      - id
+      - type
+      - sendDelay
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+        enum:
+          - deliveryTime
+      sendDelay:
+        description: Estimated delivery delay
+        type: integer
+        format: int32
+        example: '5'
+  material:
+    type: object
+    required:
+      - id
+      - type
+      - name
+      - localizedName
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+        enum:
+          - material
+      name:
+        description: Material name
+        type: string
+        example: Leather
+      localizedName:
+        description: Material name (localized)
+        type: string
+        example: Cuir
+      parent:
+        description: >-
+          [Relationship] upper-level material (for example 'leather' for 'exotic
+          leather')
+        $ref: '#/definitions/material'
+  mechanism:
+    type: object
+    required:
+      - id
+      - type
+      - name
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+        enum:
+          - mechanism
+      name:
+        description: Watch mechanism
+        type: string
+        example: Automatic
+      localizedName:
+        description: mechanism name (localized)
+        type: string
+        example: Automatique
+  model:
+    type: object
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+        enum:
+          - model
+      name:
+        description: Model name
+        type: string
+        example: Timeless
+      localizedName:
+        description: Model name (localized)
+        type: string
+        example: Timeless
+    required:
+      - id
+      - type
+  negotiation:
+    type: object
+    required:
+      - id
+      - type
+      - creationDate
+      - price
+      - initialPrice
+      - minOffer
+      - maxOffer
+      - sellerRemainingOffers
+      - buyerRemainingOffers
+      - userMessage
+      - isAccepted
+      - isClosed
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+        enum:
+          - negotiation
+      creationDate:
+        type: string
+        format: date-time
+        example: '1985-01-24T08:17:00Z'
+        description: Date when negotiation was created
+      price:
+        description: >
+          Current price of the negotiation (amount can depends between seller or
+          buyer
+
+          due to currency rates variations)
+        $ref: '#/definitions/price'
+      initialPrice:
+        description: Initial offer price
+        $ref: '#/definitions/price'
+      minOffer:
+        description: Min allowed offer price. New offers should be strictly greater
+        $ref: '#/definitions/price'
+      maxOffer:
+        description: Max allowed offer price. New offers should be lower of equals
+        $ref: '#/definitions/price'
+      sellerRemainingOffers:
+        description: Remaining offer count allowed for seller
+        type: integer
+        format: int32
+      buyerRemainingOffers:
+        description: Remaining offer count allowed for buyer
+        type: integer
+        format: int32
+      userMessage:
+        description: >-
+          Displayable translated message that describes the status of the
+          negotiation
+        example: Offer accepted
+        type: string
+      isAccepted:
+        description: A negotiation is accepted if someone has accepted an offer
+        type: boolean
+      isClosed:
+        description: A negotiation is closed if no actions are available for anyone
+        type: boolean
+      userSubMessage:
+        description: Displayable translated message that gives detail of the negotiation
+        example: You have 2 hours and 20 minutes left to accept or reject this offer
+        type: string
+      expirationDate:
+        type: string
+        format: date-time
+        example: '1985-01-24T08:17:00Z'
+        description: Date when negotiation expires
+      sellerPvnPrice:
+        description: PVN (Seller share). Only if the caller if the seller
+        $ref: '#/definitions/price'
+      nextActions:
+        description: A list of next allowed actions for the caller
+        type: array
+        items:
+          type: string
+          enum:
+            - offer
+            - accept
+            - reject
+            - order
+      seller:
+        description: '[Relationship] Product''s seller'
+        $ref: '#/definitions/user'
+      buyer:
+        description: '[Relationship] Product''s buyer'
+        $ref: '#/definitions/user'
+      product:
+        description: '[Relationship] Negotiated product'
+        $ref: '#/definitions/product'
+      lastEvent:
+        description: '[Relationship] Last negotiation event'
+        $ref: '#/definitions/negotiationEvent'
+      events:
+        type: array
+        description: '[Relationship] Negotiation-related events history'
+        items:
+          $ref: '#/definitions/negotiationEvent'
+  negotiationEvent:
+    type: object
+    required:
+      - id
+      - type
+      - action
+      - creationDate
+      - createdBy
+      - userMessage
+      - price
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+        enum:
+          - negotiationEvent
+      action:
+        description: |
+          Type of event. Can be one of the following:
+            - offer: offer or counter-offer
+            - accept: acceptation of an offer
+            - reject: rejection of an offer, without making a counter-offer
+            - order: action of buying the product (after payment and anti-fraud controls)
+            - external: external actions that directly impact the negotiation (for example: ! product bought by someone else)
+        type: string
+        enum:
+          - offer
+          - accept
+          - reject
+          - order
+          - external
+        example: offer
+      creationDate:
+        description: Date when event was created
+        type: string
+        format: date-time
+        example: '1985-01-24T08:17:00Z'
+      createdBy:
+        type: string
+        enum:
+          - seller
+          - buyer
+          - vc
+        example: buyer
+        description: Role of the user who created the event
+      userMessage:
+        description: >-
+          Displayable translated message that describes the status of the
+          negotiation
+        example: Offer accepted
+        type: string
+      price:
+        description: Current offer price
+        $ref: '#/definitions/price'
+      sellerPvnPrice:
+        description: PVN (Seller share). Only if the caller if the seller
+        $ref: '#/definitions/price'
+  notification:
+    type: object
+    required:
+      - id
+      - type
+      - idItem
+      - picture
+      - pictureName
+      - itemUrl
+      - pictureItemNotification
+      - itemName
+      - email
+      - textAuthor
+      - textComplement
+      - picto
+      - date
+      - urlScheme
+      - viewed
+      - clicked
+      - clickable
+      - setting
+      - link
+      - supportedDevices
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+        enum:
+          - notification
+      idItem:
+        description: Item id
+        type: string
+        format: string
+        example: '324234'
+      picture:
+        description: Picture's Path
+        type: string
+        format: string
+        example: >-
+          https://vestiairecollective-dev.imgix.net/iphone/ui_v3/icon-v-messages.png?auto=format
+      pictureItemNotification:
+        description: Picture item notification
+        type: string
+        format: string
+        example: string
+      itemName:
+        description: Item name
+        type: string
+        format: string
+        example: produit/2875617-1_1.jpg
+      email:
+        description: Email
+        type: string
+        format: string
+        example: veronique.la@yahoo.fr
+      textAuthor:
+        description: Text author
+        type: string
+        format: string
+        example: Votre commande n°123457113
+      textComplement:
+        description: Text complement
+        type: string
+        format: string
+        example: a bien été prise en compte.
+      picto:
+        description: Picto Path
+        type: string
+        format: string
+        example: >-
+          https://vestiairecollective-dev.imgix.net/iphone/ui_v3/icon-inbox-box.png?auto=format
+      date:
+        description: Date
+        type: string
+        format: date-time
+        example: '1985-01-24T08:17:00Z'
+      urlScheme:
+        description: URL scheme
+        type: string
+        format: string
+        example: 'com.vestiairecollective.vestiaire://action?type=commande&id=123457113'
+      viewed:
+        description: Viewed
+        type: boolean
+        format: boolean
+        example: 'false'
+      clicked:
+        description: Clicked
+        type: boolean
+        format: boolean
+        example: 'true'
+      clickable:
+        description: Clickable
+        type: boolean
+        format: boolean
+        example: 'true'
+      setting:
+        description: Notification's state
+        type: string
+        format: string
+        example: mmao2_accept
+      link:
+        description: Account's path
+        type: string
+        format: string
+        example: 'mon-compte.shtml#commande'
+      supportedDevices:
+        description: Status code
+        type: object
+        format: object
+        example:
+          - androidTablet
+          - android
+          - iphone
+          - ipad
+      itemUrl:
+        description: item's url
+        type: string
+        format: string
+        example: >-
+          https://vestiairecollective-dev.imgix.net/produit/2875617-1_1.jpg?auto=format&fm=pjpg&w=40&dpr=1
+      pictureName:
+        description: Picture name
+        type: string
+        format: string
+        example: missing_avatar.gif
+      negotiation:
+        description: '[Relationship] negotiation'
+        $ref: '#/definitions/negotiation'
+      transmitter:
+        description: '[Relationship] User transmitter notification'
+        $ref: '#/definitions/user'
+      receiver:
+        description: '[Relationship] User received the notification'
+        $ref: '#/definitions/user'
+  order:
+    type: object
+    required:
+      - id
+      - type
+      - creationDate
+      - itemsNumber
+      - totalAmount
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+        enum:
+          - order
+      creationDate:
+        description: Order creation date
+        type: string
+        format: date-time
+        example: '1985-01-24T08:17:00Z'
+      itemsNumber:
+        type: integer
+        description: Order items count
+        format: int32
+        example: '3'
+      itemsAmount:
+        $ref: '#/definitions/price'
+      dutiesAmount:
+        $ref: '#/definitions/price'
+      buyerFeesAmount:
+        $ref: '#/definitions/price'
+      shippingAmount:
+        $ref: '#/definitions/price'
+      totalAmount:
+        $ref: '#/definitions/price'
+      shipping:
+        $ref: '#/definitions/shipping'
+      subTotalCostBeforeShipping:
+        $ref: '#/definitions/price'
+      buyer:
+        description: '[Relationship] Order client'
+        $ref: '#/definitions/user'
+      orderLines:
+        type: array
+        description: '[Relationship] Order items list'
+        items:
+          $ref: '#/definitions/orderLine'
+  orderLine:
+    type: object
+    required:
+      - id
+      - type
+      - product
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+        enum:
+          - orderLine
+      creationDate:
+        description: Date of creation of the order line
+        type: string
+        format: date-time
+        example: '1985-01-24T08:17:00Z'
+      duties:
+        $ref: '#/definitions/duty'
+      buyerFees:
+        type: array
+        items:
+          $ref: '#/definitions/buyerFee'
+      plans:
+        type: array
+        items:
+          $ref: '#/definitions/plan_option'
+      product:
+        description: '[Relationship] Order line''s product'
+        $ref: '#/definitions/product'
+  pattern:
+    type: object
+    required:
+      - id
+      - type
+      - name
+      - localizedName
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+        enum:
+          - pattern
+      name:
+        description: original brand name
+        type: string
+        example: Cardigan
+      localizedName:
+        description: Brand name (localized)
+        type: string
+        example: Cardigan
+  product:
+    type: object
+    required:
+      - id
+      - type
+      - name
+      - price
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+        enum:
+          - product
+      name:
+        description: Product name
+        type: string
+        example: Very expensive and ugly boots
+      price:
+        description: Current price
+        $ref: '#/definitions/price'
+      regularPrice:
+        description: Regular price (before discount)
+        $ref: '#/definitions/price'
+      description:
+        description: Seller's description
+        type: string
+        example: That some very beautiful boots from a great creator
+      localizedDescription:
+        description: Translated seller's description in local language
+        type: string
+        example: Ces bottes vraiment magnifique en provenance d'un grand grand créateur
+      editorDescription:
+        type: string
+        description: Editor's pick
+        example: Our expert says that this product is a bull xxxx
+      likeCount:
+        type: integer
+        description: Number of likes
+        example: '44'
+      path:
+        description: Path of product page
+        type: string
+        format: path
+        example: >-
+          /vetements-femme/robes/bcbg-max-azria/robe-bcbg-max-azria-noir-311.shtml
+      sold:
+        description: Status of the product sold or not
+        type: boolean
+        example: 'false'
+      negotiable:
+        description: Possibility to negotiable
+        type: boolean
+        example: 'true'
+      inStock:
+        type: boolean
+        description: Product is in stock and ready to ship
+        example: 'false'
+      warehouse:
+        $ref: '#/definitions/warehouse'
+      tags:
+        type: array
+        items:
+          $ref: '#/definitions/product_tag'
+      creationDate:
+        description: Creation date of the product
+        type: string
+        format: date-time
+        example: '1985-01-24T08:17:00Z'
+      soldDate:
+        description: Sold date of the product
+        type: string
+        format: date-time
+        example: '1985-06-24T08:17:00Z'
+      pictures:
+        type: array
+        items:
+          $ref: '#/definitions/picture'
+      size:
+        $ref: '#/definitions/size'
+      measurements:
+        type: array
+        items:
+          $ref: '#/definitions/product_measurement'
+      unit:
+        $ref: '#/definitions/unit'
+      brand:
+        $ref: '#/definitions/brand'
+      material:
+        $ref: '#/definitions/material'
+      pattern:
+        $ref: '#/definitions/pattern'
+      color:
+        $ref: '#/definitions/color'
+      condition:
+        $ref: '#/definitions/condition'
+      universe:
+        $ref: '#/definitions/universe'
+      category:
+        $ref: '#/definitions/category'
+      subcategory:
+        $ref: '#/definitions/subcategory'
+      season:
+        $ref: '#/definitions/season'
+      model:
+        $ref: '#/definitions/model'
+      installment:
+        $ref: '#/definitions/product_installment'
+      packagings:
+        type: array
+        items:
+          $ref: '#/definitions/product_packaging'
+      meshLinks:
+        $ref: '#/definitions/product_meshLinks'
+      prohibitedCountries:
+        type: array
+        items:
+          type: string
+        description: >-
+          ISO code list of countries where product shipping is prohibited due to
+          country restrictions
+        example:
+          - US
+          - AU
+          - CN
+      buyersWhoHaveActiveNegotiation:
+        type: array
+        items:
+          type: string
+        description: Buyers who have a negotiation in progress
+        example:
+          - '12340'
+          - '56789'
+      buyersWhoAreOnNegotiationHold:
+        type: array
+        items:
+          type: string
+        description: buyers who are on negotiation hold
+        example:
+          - '12340'
+          - '56789'
+      receipt:
+        type: boolean
+        description: Product is received by VC
+        example: 'true'
+      available:
+        description: Product Availability
+        type: boolean
+        example: 'false'
+      alternateVersions:
+        description: Regional variations of the page.
+        type: array
+        items:
+          $ref: '#/definitions/contents_localizedPath'
+      metadata:
+        $ref: '#/definitions/contents_pageMetadata'
+      shouldBeGone:
+        description: Product's sold having whitelist flag (true if must have http_gone)
+        type: boolean
+        example: 'false'
+      indexation:
+        $ref: '#/definitions/contents_pageIndexation'
+      consignment:
+        description: Product is from consigment
+        type: boolean
+        example: 'false'
+      buyerFees:
+        type: array
+        items:
+          $ref: '#/definitions/buyerFee'
+      isoCountry:
+        description: Product location before sell
+        type: string
+        example: FR
+      flags:
+        type: array
+        items:
+          type: string
+        description: Product flags
+      services:
+        description: Service activated or not in the context of a shipping option
+        type: array
+        items:
+          $ref: '#/definitions/plan'
+      seller:
+        description: '[Relationship] Client who sells product'
+        $ref: '#/definitions/user'
+      watchStrapMaterial:
+        description: '[Relationship] Watch strap material'
+        $ref: '#/definitions/material'
+      watchMechanism:
+        description: '[Relationship] Watch mechanism'
+        $ref: '#/definitions/mechanism'
+  season:
+    type: object
+    required:
+      - id
+      - type
+      - name
+      - localizedName
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+        enum:
+          - season
+      name:
+        description: Season name
+        type: string
+        example: Autumn / Winter
+      localizedName:
+        description: Season name (localized)
+        type: string
+        example: Automne / Hiver
+  session:
+    type: object
+    required:
+      - id
+      - type
+      - i18n
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+        enum:
+          - session
+      i18n:
+        $ref: '#/definitions/i18n'
+      user:
+        description: '[Relationship]'
+        $ref: '#/definitions/user'
+  shippingPlan:
+    type: object
+    required:
+      - id
+      - type
+      - shippingPlan
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+        enum:
+          - shippingPlan
+      shippingPlan:
+        description: Is a plan eligible or not
+        type: array
+        items:
+          $ref: '#/definitions/plan'
+  size:
+    type: object
+    required:
+      - id
+      - type
+      - size
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+        enum:
+          - size
+      size:
+        description: size
+        type: string
+        example: '38'
+      standard:
+        type: string
+        example: EU
+      localizedStandard:
+        type: string
+        example: EU
+  subcategory:
+    type: object
+    required:
+      - id
+      - type
+      - name
+      - localizedName
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+        enum:
+          - subcategory
+      name:
+        description: Subcategory name from db table type_subcategory
+        type: string
+        example: Mid-length
+      localizedName:
+        description: Localized subcategory name from db table type_subcategory
+        type: string
+        example: Mi long
+  universe:
+    type: object
+    required:
+      - id
+      - type
+      - name
+      - localizedName
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+        enum:
+          - universe
+      name:
+        description: Universe name
+        type: string
+        example: Women
+      localizedName:
+        description: Universe name (localized)
+        type: string
+        example: Femmes
+  user:
+    type: object
+    required:
+      - id
+      - type
+      - firstname
+      - civility
+      - language
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+        enum:
+          - user
+      firstname:
+        description: user firstname
+        type: string
+        example: Marie
+      username:
+        description: User name
+        type: string
+        format: username
+        example: fashionAddict75001
+      email:
+        description: user email
+        type: string
+        format: email
+        example: fashionAddict75001@laposte.net!
+      hasWallet:
+        description: a flag which shows if a client has a has a wallet
+        type: boolean
+        example: 'true'
+      picture:
+        $ref: '#/definitions/picture'
+      cover:
+        $ref: '#/definitions/picture'
+      url:
+        $ref: '#/definitions/url'
+      birthDate:
+        description: 'Birth date (AAAA-MM-DDT00:00:00Z)'
+        type: string
+        format: date-time
+        example: '1985-01-24T08:17:00Z'
+      country:
+        description: Seller country
+        type: string
+        example: France
+      inscriptionDate:
+        description: 'Inscription date (AAAA-MM-DDT00:00:00Z)'
+        type: string
+        format: date-time
+        example: '1985-01-24T08:17:00Z'
+      civility:
+        $ref: '#/definitions/user_civility'
+      social:
+        $ref: '#/definitions/user_social'
+      statistics:
+        $ref: '#/definitions/user_statistics'
+      sellerRating:
+        $ref: '#/definitions/user_sellerRating'
+      language:
+        $ref: '#/definitions/language'
+      productReporter:
+        description: User right to report a product
+        type: boolean
+        example: 'false'
+      badges:
+        type: array
+        items:
+          $ref: '#/definitions/user_badge'
+      apps:
+        type: array
+        items:
+          $ref: '#/definitions/user_app'
+      internalAccount:
+        description: VC's Internal Account
+        type: boolean
+        example: 'true'
+      address:
+        description: '[Relationship] User''s address'
+        $ref: '#/definitions/address'
+parameters:
+  limit:
+    name: limit
+    in: query
+    description: This is the maximum number of objects that may be returned.
+    required: false
+    type: integer
+    format: int32
+    default: 10
+  offset:
+    name: offset
+    in: query
+    description: This offsets the start of each page by the number specified.
+    required: false
+    type: integer
+    format: int32
+    default: 0
+responses:
+  '400':
+    description: The request was invalid or cannot be otherwise served.
+    schema:
+      $ref: '#/definitions/errorResponse'
+  '401':
+    description: Missing or incorrect authentication credentials.
+    schema:
+      $ref: '#/definitions/errorResponse'
+  '404':
+    description: The requested resource doesn't exist.
+    schema:
+      $ref: '#/definitions/errorResponse'
+  '409':
+    description: >-
+      The request conflicts with another request (perhaps due to already
+      existing resource).
+    schema:
+      $ref: '#/definitions/errorResponse'

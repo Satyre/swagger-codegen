@@ -1,12 +1,13 @@
 package io.swagger.codegen.languages;
 
-import io.swagger.codegen.CliOption;
-import io.swagger.codegen.CodegenConfig;
-import io.swagger.codegen.CodegenConstants;
-import io.swagger.codegen.DefaultCodegen;
+import io.swagger.codegen.*;
+import io.swagger.models.Model;
+import io.swagger.models.Operation;
+import io.swagger.models.Swagger;
 import io.swagger.models.properties.ArrayProperty;
 import io.swagger.models.properties.MapProperty;
 import io.swagger.models.properties.Property;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +22,7 @@ public abstract class AbstractKotlinCodegen extends DefaultCodegen implements Co
 
     protected String artifactId;
     protected String artifactVersion = "1.0.0";
-    protected String groupId = "io.swagger";
+    protected String groupId = "fr.vestiairecollective";
     protected String packageName;
 
     protected String sourceFolder = "src/main/kotlin";
@@ -29,26 +30,26 @@ public abstract class AbstractKotlinCodegen extends DefaultCodegen implements Co
     protected String apiDocPath = "docs/";
     protected String modelDocPath = "docs/";
 
-    protected CodegenConstants.ENUM_PROPERTY_NAMING_TYPE enumPropertyNaming = CodegenConstants.ENUM_PROPERTY_NAMING_TYPE.camelCase;
+    protected CodegenConstants.ENUM_PROPERTY_NAMING_TYPE enumPropertyNaming = CodegenConstants.ENUM_PROPERTY_NAMING_TYPE.original;
 
     public AbstractKotlinCodegen() {
         super();
         supportsInheritance = true;
 
         languageSpecificPrimitives = new HashSet<String>(Arrays.asList(
-                "kotlin.Byte",
-                "kotlin.Short",
-                "kotlin.Int",
-                "kotlin.Long",
-                "kotlin.Float",
-                "kotlin.Double",
-                "kotlin.Boolean",
-                "kotlin.Char",
-                "kotlin.String",
-                "kotlin.Array",
-                "kotlin.collections.List",
-                "kotlin.collections.Map",
-                "kotlin.collections.Set"
+                "Byte",
+                "Short",
+                "Int",
+                "Long",
+                "Float",
+                "Double",
+                "Boolean"
+//                "Char",
+//                "String",
+//                "Array",
+//                "List",
+//                "Map",
+//                "Set"
         ));
 
         // this includes hard reserved words defined by https://github.com/JetBrains/kotlin/blob/master/core/descriptors/src/org/jetbrains/kotlin/renderer/KeywordStringsGenerated.java
@@ -66,7 +67,7 @@ public abstract class AbstractKotlinCodegen extends DefaultCodegen implements Co
                 "constructor",
                 "continue",
                 "crossinline",
-                "data",
+//                "data",
                 "delegate",
                 "do",
                 "else",
@@ -120,45 +121,46 @@ public abstract class AbstractKotlinCodegen extends DefaultCodegen implements Co
         ));
 
         defaultIncludes = new HashSet<String>(Arrays.asList(
-                "kotlin.Byte",
-                "kotlin.Short",
-                "kotlin.Int",
-                "kotlin.Long",
-                "kotlin.Float",
-                "kotlin.Double",
-                "kotlin.Boolean",
-                "kotlin.Char",
-                "kotlin.Array",
-                "kotlin.collections.List",
-                "kotlin.collections.Set",
-                "kotlin.collections.Map"
+                "Byte",
+                "Short",
+                "Int",
+                "Long",
+                "Float",
+                "Double",
+                "Boolean",
+                "Char",
+                "Array",
+                "List",
+                "Set",
+                "Map"
         ));
 
         typeMapping = new HashMap<String, String>();
-        typeMapping.put("string", "kotlin.String");
-        typeMapping.put("boolean", "kotlin.Boolean");
-        typeMapping.put("integer", "kotlin.Int");
-        typeMapping.put("float", "kotlin.Float");
-        typeMapping.put("long", "kotlin.Long");
-        typeMapping.put("double", "kotlin.Double");
-        typeMapping.put("number", "java.math.BigDecimal");
-        typeMapping.put("date-time", "java.time.LocalDateTime");
-        typeMapping.put("date", "java.time.LocalDateTime");
+        typeMapping.put("string", "String");
+        typeMapping.put("boolean", "Boolean");
+        typeMapping.put("integer", "Int");
+        typeMapping.put("float", "Float");
+        typeMapping.put("long", "Long");
+        typeMapping.put("double", "Double");
+        typeMapping.put("number", "Double");
+        typeMapping.put("date-time", "Calendar");
+        typeMapping.put("date", "Calendar");
         typeMapping.put("file", "java.io.File");
-        typeMapping.put("array", "kotlin.Array");
-        typeMapping.put("list", "kotlin.Array");
-        typeMapping.put("map", "kotlin.collections.Map");
-        typeMapping.put("object", "kotlin.Any");
-        typeMapping.put("binary", "kotlin.Array<kotlin.Byte>");
-        typeMapping.put("Date", "java.time.LocalDateTime");
-        typeMapping.put("DateTime", "java.time.LocalDateTime");
+        typeMapping.put("array", "Array");
+        typeMapping.put("list", "Array");
+        typeMapping.put("map", "Map");
+//        typeMapping.put("object", "Any");
+        typeMapping.put("object", "Empty");
+        typeMapping.put("binary", "Array<Byte>");
+        typeMapping.put("Date", "Calendar");
+        typeMapping.put("DateTime", "Calendar");
 
         instantiationTypes.put("array", "arrayOf");
         instantiationTypes.put("list", "arrayOf");
         instantiationTypes.put("map", "mapOf");
 
         importMapping = new HashMap<String, String>();
-        importMapping.put("BigDecimal", "java.math.BigDecimal");
+        importMapping.put("BigDecimal", "Double");
         importMapping.put("UUID", "java.util.UUID");
         importMapping.put("File", "java.io.File");
         importMapping.put("Date", "java.util.Date");
@@ -167,6 +169,7 @@ public abstract class AbstractKotlinCodegen extends DefaultCodegen implements Co
         importMapping.put("LocalDateTime", "java.time.LocalDateTime");
         importMapping.put("LocalDate", "java.time.LocalDate");
         importMapping.put("LocalTime", "java.time.LocalTime");
+        importMapping.put("Calendar", "java.util.Calendar");
 
         specialCharReplacements.put(";", "Semicolon");
 
@@ -179,6 +182,22 @@ public abstract class AbstractKotlinCodegen extends DefaultCodegen implements Co
 
         CliOption enumPropertyNamingOpt = new CliOption(CodegenConstants.ENUM_PROPERTY_NAMING, CodegenConstants.ENUM_PROPERTY_NAMING_DESC);
         cliOptions.add(enumPropertyNamingOpt.defaultValue(enumPropertyNaming.name()));
+    }
+
+    protected void addOption(String key, String description) {
+        addOption(key, description, null);
+    }
+
+    protected void addOption(String key, String description, String defaultValue) {
+        CliOption option = new CliOption(key, description);
+        if (defaultValue != null) option.defaultValue(defaultValue);
+        cliOptions.add(option);
+    }
+
+    protected void addSwitch(String key, String description, Boolean defaultValue) {
+        CliOption option = CliOption.newBoolean(key, description);
+        if (defaultValue != null) option.defaultValue(defaultValue.toString());
+        cliOptions.add(option);
     }
 
     @Override
@@ -239,7 +258,7 @@ public abstract class AbstractKotlinCodegen extends DefaultCodegen implements Co
     public String getSwaggerType(Property p) {
         String swaggerType = super.getSwaggerType(p);
         String type;
-        // This maps, for example, long -> kotlin.Long based on hashes in this type's constructor
+        // This maps, for example, long -> Long based on hashes in this type's constructor
         if (typeMapping.containsKey(swaggerType)) {
             type = typeMapping.get(swaggerType);
             if (languageSpecificPrimitives.contains(type)) {
@@ -266,7 +285,7 @@ public abstract class AbstractKotlinCodegen extends DefaultCodegen implements Co
             Property inner = mp.getAdditionalProperties();
 
             // Maps will be keyed only by primitive Kotlin string
-            return getSwaggerType(p) + "<kotlin.String, " + getTypeDeclaration(inner) + ">";
+            return getSwaggerType(p) + "<String, " + getTypeDeclaration(inner) + ">";
         }
         return super.getTypeDeclaration(p);
     }
@@ -407,6 +426,11 @@ public abstract class AbstractKotlinCodegen extends DefaultCodegen implements Co
     }
 
     @Override
+    public String toEnumName(CodegenProperty property) {
+        return StringUtils.capitalize(property.name);
+    }
+
+    @Override
     public String toInstantiationType(Property p) {
         if (p instanceof ArrayProperty) {
             return getArrayTypeDeclaration((ArrayProperty) p);
@@ -450,23 +474,23 @@ public abstract class AbstractKotlinCodegen extends DefaultCodegen implements Co
             return importMapping.get(name);
         }
 
-        String modifiedName = name.replaceAll("\\.", "");
+        String modifiedName = name.replaceAll("\\.", "").replaceAll("-", "_");
         modifiedName = sanitizeKotlinSpecificNames(modifiedName);
-
-        // Camelize name of nested properties
-        modifiedName = camelize(modifiedName);
 
         if (reservedWords.contains(modifiedName)) {
             modifiedName = escapeReservedWord(modifiedName);
         }
+
+        modifiedName = titleCase(modifiedName);
+        modifiedName = camelize(modifiedName);
 
         return titleCase(modifiedName);
     }
 
     @Override
     public String toModelFilename(String name) {
-        // Should be the same as the model name
-        return toModelName(name);
+        // should be the same as the model name
+        return toModelName(name.replace("-", "_"));
     }
 
     /**
@@ -525,6 +549,75 @@ public abstract class AbstractKotlinCodegen extends DefaultCodegen implements Co
         // We want case-sensitive escaping, to avoid unnecessary backtick-escaping.
         return reservedWords.contains(word);
     }
+	
+	@Override
+    public String toApiName(String name) {
+        if (name.length() == 0) {
+            return "DefaultService";
+        }
+        return initialCaps(name) + "Service";
+    }
+
+    @Override
+    public CodegenOperation fromOperation(String path, String httpMethod, Operation operation, Map<String, Model> definitions, Swagger swagger) {
+        path = path.replaceAll("^/", "").replaceAll("/$", "");
+        return super.fromOperation(path, httpMethod, operation, definitions, swagger);
+    }
+
+    @Override
+    public CodegenOperation fromOperation(String path, String httpMethod, Operation operation, Map<String, Model> definitions) {
+        path = path.replaceAll("^/", "").replaceAll("/$", "");
+        return super.fromOperation(path, httpMethod, operation, definitions);
+    }
+
+    @Override
+    public String toVarName(String name) {
+        // sanitize name
+        name = sanitizeName(name);
+
+        name = name.replaceAll("-", "_");
+
+        // if it's all uppper case, do nothing
+        if (name.matches("^[A-Z_]*$")) {
+            return name;
+        }
+
+        // camelize the variable name
+        // pet_id => petId
+        name = camelize(name, true);
+
+        // for reserved word or word starting with number, append _
+        if (isReservedWord(name) || name.matches("^\\d.*")) {
+            name = escapeReservedWord(name);
+        }
+
+        return name;
+    }
+
+    @Override
+    public String toParamName(String name) {
+        // sanitize name
+        name = sanitizeName(name);
+
+        // replace - with _ e.g. created-at => created_at
+        name = name.replaceAll("-", "_");
+
+        // if it's all uppper case, do nothing
+        if (name.matches("^[A-Z_]*$")) {
+            return name;
+        }
+
+        // camelize(lower) the variable name
+        // pet_id => petId
+        name = camelize(name, true);
+
+        // for reserved word or word starting with number, append _
+        if (isReservedWord(name) || name.matches("^\\d.*")) {
+            name = escapeReservedWord(name);
+        }
+
+        return name;
+    }
 
     /**
      * Check the type to see if it needs import the library/module/package
@@ -535,7 +628,6 @@ public abstract class AbstractKotlinCodegen extends DefaultCodegen implements Co
     @Override
     protected boolean needToImport(String type) {
         // provides extra protection against improperly trying to import language primitives and java types
-        boolean imports = !type.startsWith("kotlin.") && !type.startsWith("java.") && !defaultIncludes.contains(type) && !languageSpecificPrimitives.contains(type);
-        return imports;
+        return !type.startsWith("kotlin.") && !type.startsWith("java.") && !defaultIncludes.contains(type) && !languageSpecificPrimitives.contains(type);
     }
 }
