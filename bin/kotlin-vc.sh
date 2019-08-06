@@ -22,7 +22,7 @@ if [ ! -d "${APP_DIR}" ]; then
   APP_DIR=$(cd "${APP_DIR}"; pwd)
 fi
 
-executable="./modules/swagger-codegen-cli/target/swagger-codegen-cli.jar"
+executable="./run-in-docker.sh"
 
 if [ ! -f "$executable" ]
 then
@@ -33,7 +33,7 @@ fi
 export JAVA_OPTS="${JAVA_OPTS} -XX:MaxPermSize=256M -Xmx1024M -DloggerPath=conf/log4j.properties"
 ags="generate -t modules/swagger-codegen/src/main/resources/kotlin-client -i specification.yml -l kotlin --artifact-id kotlin-vc-client -o kotlin $@"
 
-java ${JAVA_OPTS} -jar ${executable} ${ags}
+${executable} ${ags}
 cd kotlin/src/main/kotlin/fr/vestiairecollective/network/redesign/model
 sed -i.bak 's/, )/)/' *.kt
 rm *.bak
