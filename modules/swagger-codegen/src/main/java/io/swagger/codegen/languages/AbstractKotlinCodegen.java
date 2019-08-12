@@ -30,7 +30,7 @@ public abstract class AbstractKotlinCodegen extends DefaultCodegen implements Co
     protected String apiDocPath = "docs/";
     protected String modelDocPath = "docs/";
 
-    protected CodegenConstants.ENUM_PROPERTY_NAMING_TYPE enumPropertyNaming = CodegenConstants.ENUM_PROPERTY_NAMING_TYPE.original;
+    protected CodegenConstants.ENUM_PROPERTY_NAMING_TYPE enumPropertyNaming = CodegenConstants.ENUM_PROPERTY_NAMING_TYPE.camelCase;
 
     public AbstractKotlinCodegen() {
         super();
@@ -184,22 +184,6 @@ public abstract class AbstractKotlinCodegen extends DefaultCodegen implements Co
         cliOptions.add(enumPropertyNamingOpt.defaultValue(enumPropertyNaming.name()));
     }
 
-    protected void addOption(String key, String description) {
-        addOption(key, description, null);
-    }
-
-    protected void addOption(String key, String description, String defaultValue) {
-        CliOption option = new CliOption(key, description);
-        if (defaultValue != null) option.defaultValue(defaultValue);
-        cliOptions.add(option);
-    }
-
-    protected void addSwitch(String key, String description, Boolean defaultValue) {
-        CliOption option = CliOption.newBoolean(key, description);
-        if (defaultValue != null) option.defaultValue(defaultValue.toString());
-        cliOptions.add(option);
-    }
-
     @Override
     public String apiDocFileFolder() {
         return (outputFolder + "/" + apiDocPath).replace('/', File.separatorChar);
@@ -258,7 +242,7 @@ public abstract class AbstractKotlinCodegen extends DefaultCodegen implements Co
     public String getSwaggerType(Property p) {
         String swaggerType = super.getSwaggerType(p);
         String type;
-        // This maps, for example, long -> Long based on hashes in this type's constructor
+        // This maps, for example, long -> kotlin.Long based on hashes in this type's constructor
         if (typeMapping.containsKey(swaggerType)) {
             type = typeMapping.get(swaggerType);
             if (languageSpecificPrimitives.contains(type)) {
@@ -426,11 +410,6 @@ public abstract class AbstractKotlinCodegen extends DefaultCodegen implements Co
     }
 
     @Override
-    public String toEnumName(CodegenProperty property) {
-        return StringUtils.capitalize(property.name);
-    }
-
-    @Override
     public String toInstantiationType(Property p) {
         if (p instanceof ArrayProperty) {
             return getArrayTypeDeclaration((ArrayProperty) p);
@@ -474,23 +453,23 @@ public abstract class AbstractKotlinCodegen extends DefaultCodegen implements Co
             return importMapping.get(name);
         }
 
-        String modifiedName = name.replaceAll("\\.", "").replaceAll("-", "_");
+        String modifiedName = name.replaceAll("\\.", "");
         modifiedName = sanitizeKotlinSpecificNames(modifiedName);
+
+        // Camelize name of nested properties
+        modifiedName = camelize(modifiedName);
 
         if (reservedWords.contains(modifiedName)) {
             modifiedName = escapeReservedWord(modifiedName);
         }
-
-        modifiedName = titleCase(modifiedName);
-        modifiedName = camelize(modifiedName);
 
         return titleCase(modifiedName);
     }
 
     @Override
     public String toModelFilename(String name) {
-        // should be the same as the model name
-        return toModelName(name.replace("-", "_"));
+        // Should be the same as the model name
+        return toModelName(name);
     }
 
     /**
@@ -549,75 +528,6 @@ public abstract class AbstractKotlinCodegen extends DefaultCodegen implements Co
         // We want case-sensitive escaping, to avoid unnecessary backtick-escaping.
         return reservedWords.contains(word);
     }
-	
-	@Override
-    public String toApiName(String name) {
-        if (name.length() == 0) {
-            return "DefaultService";
-        }
-        return initialCaps(name) + "Service";
-    }
-
-    @Override
-    public CodegenOperation fromOperation(String path, String httpMethod, Operation operation, Map<String, Model> definitions, Swagger swagger) {
-        path = path.replaceAll("^/", "").replaceAll("/$", "");
-        return super.fromOperation(path, httpMethod, operation, definitions, swagger);
-    }
-
-    @Override
-    public CodegenOperation fromOperation(String path, String httpMethod, Operation operation, Map<String, Model> definitions) {
-        path = path.replaceAll("^/", "").replaceAll("/$", "");
-        return super.fromOperation(path, httpMethod, operation, definitions);
-    }
-
-    @Override
-    public String toVarName(String name) {
-        // sanitize name
-        name = sanitizeName(name);
-
-        name = name.replaceAll("-", "_");
-
-        // if it's all uppper case, do nothing
-        if (name.matches("^[A-Z_]*$")) {
-            return name;
-        }
-
-        // camelize the variable name
-        // pet_id => petId
-        name = camelize(name, true);
-
-        // for reserved word or word starting with number, append _
-        if (isReservedWord(name) || name.matches("^\\d.*")) {
-            name = escapeReservedWord(name);
-        }
-
-        return name;
-    }
-
-    @Override
-    public String toParamName(String name) {
-        // sanitize name
-        name = sanitizeName(name);
-
-        // replace - with _ e.g. created-at => created_at
-        name = name.replaceAll("-", "_");
-
-        // if it's all uppper case, do nothing
-        if (name.matches("^[A-Z_]*$")) {
-            return name;
-        }
-
-        // camelize(lower) the variable name
-        // pet_id => petId
-        name = camelize(name, true);
-
-        // for reserved word or word starting with number, append _
-        if (isReservedWord(name) || name.matches("^\\d.*")) {
-            name = escapeReservedWord(name);
-        }
-
-        return name;
-    }
 
     /**
      * Check the type to see if it needs import the library/module/package
@@ -628,6 +538,7 @@ public abstract class AbstractKotlinCodegen extends DefaultCodegen implements Co
     @Override
     protected boolean needToImport(String type) {
         // provides extra protection against improperly trying to import language primitives and java types
-        return !type.startsWith("kotlin.") && !type.startsWith("java.") && !defaultIncludes.contains(type) && !languageSpecificPrimitives.contains(type);
+        boolean imports = !type.startsWith("kotlin.") && !type.startsWith("java.") && !defaultIncludes.contains(type) && !languageSpecificPrimitives.contains(type);
+        return imports;
     }
 }
